@@ -31,14 +31,14 @@ export default function ExploreSection() {
             <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
               I spend my time running{" "}
               <Link
-                href={LINKS.company.hourglassDigital}
+                href={LINKS.company.hourglassAI}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="underline underline-offset-4"
               >
-                Hourglass Digital
+                Hourglass AI
               </Link>
-              , an AI consultancy.
+              .
             </p>
             <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
               I'm a big fan of surfing, basketball, and philosophy.
