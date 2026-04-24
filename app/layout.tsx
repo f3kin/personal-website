@@ -4,6 +4,7 @@ import { Inter, Poppins } from "next/font/google"
 import "./globals.css"
 import Navbar from "@/components/layout/navbar"
 import Footer from "@/components/layout/footer"
+import ShaderBackground from "@/components/shader-background"
 import { ThemeProvider } from "@/components/theme-provider"
 import { ThemeColor } from "@/components/theme-color"
 import { LINKS } from "@/lib/links"
@@ -48,9 +49,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={`${inter.variable} ${poppins.variable} font-sans`}>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
           <ThemeColor />
-          <div className="flex min-h-[100svh] min-h-[100dvh] md:min-h-screen flex-col bg-transparent">
+          <ShaderBackground />
+          <div className="flex min-h-[100svh] min-h-[100dvh] md:min-h-screen flex-col relative z-10">
             {/* <Navbar /> */}
-            <main className="flex-1 bg-transparent">
+            <main className="flex-1">
               {children}
             </main>
             <Footer />
