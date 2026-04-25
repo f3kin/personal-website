@@ -58,7 +58,6 @@ export default function ShaderBackground() {
         const surfaceRow = Math.floor(rows - bodyH)
 
         // --- curling lip at the crest ---
-        let lipBottom = surfaceRow
         if (phase > 0.66 && phase < 0.93) {
           const ct = (phase - 0.66) / 0.27
           const lipArc = Math.sin(ct * Math.PI) * 7
@@ -70,7 +69,6 @@ export default function ShaderBackground() {
             else if (v > -0.1) grid[ly][x] = "~"
             else if (v > -0.3) grid[ly][x] = "∼"
           }
-          lipBottom = Math.max(0, lipRow)
         }
 
         // --- fill wave body (consistent style throughout) ---
@@ -135,8 +133,12 @@ export default function ShaderBackground() {
   return (
     <pre
       ref={preRef}
-      className="fixed inset-0 -z-10 overflow-hidden leading-none select-none"
+      className="fixed -z-10 overflow-hidden leading-none select-none"
       style={{
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: "calc(-1 * env(safe-area-inset-bottom, 0px) - 50px)",
         fontSize: "14px",
         fontFamily: "monospace",
         color: "hsl(var(--primary) / 0.25)",
