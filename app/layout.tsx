@@ -52,7 +52,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <ShaderBackground />
           <div className="flex min-h-[100svh] min-h-[100dvh] md:min-h-screen flex-col relative z-10">
             {/* <Navbar /> */}
-            <main className="flex-1">
+            <main className="flex-1 flex flex-col">
               {children}
             </main>
             <Footer />
