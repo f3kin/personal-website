@@ -5,7 +5,7 @@ export const LINKS = {
   social: {
     linkedin: "https://www.linkedin.com/in/finlayekins",
     instagram: "https://www.instagram.com/finlayekins/",
-    x: "https://x.com/f3kin5",
+    x: "https://x.com/finlayekins",
     spotify: "https://open.spotify.com/user/finlaydekins?si=mr0Vwy4tSdqL4lbt_yQ0fA",
     email: "mailto:finlay@thehourglass.ai",
   },
