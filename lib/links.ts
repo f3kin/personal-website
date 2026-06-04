@@ -13,6 +13,10 @@ export const LINKS = {
     books: "https://finlay-ekins.notion.site/books",
     writing: "https://medium.com/@finlayekins",
   },
+  newsletter: {
+    site: "https://newsletter.finlayekins.com",
+    subscribe: "https://newsletter.finlayekins.com/subscribe",
+  },
   company: {
     hourglassAI: "https://www.thehourglass.ai",
   },

@@ -62,14 +62,10 @@ export default function ExploreSection() {
                 reading
               </Link>
               , and{" "}
-              <Link
-                href={LINKS.content.writing}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="underline underline-offset-4"
-              >
+              <Link href="/writing" className="underline underline-offset-4">
                 writing
-              </Link>.
+              </Link>
+              .
             </p>
             <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
               i spend my time running{" "}

@@ -9,7 +9,7 @@ import { motion } from "framer-motion"
 
 const navLinks = [
   { href: "/", label: "Home" },
-  { href: "/writings", label: "Writings" },
+  { href: "/writing", label: "Writing" },
 ]
 
 export default function Navbar() {
