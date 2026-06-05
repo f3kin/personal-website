@@ -83,12 +83,15 @@ export function sanitizeBeehiivHtml(html: string): string {
   // Drop inline font-size + line-height; let our CSS handle scale.
   out = out.replace(/font-size:\s*[^;"]+(?:\s*!important)?;?/gi, "")
   out = out.replace(/line-height:\s*[^;"]+(?:\s*!important)?;?/gi, "")
+  // Kill any `url(...)` references in inline styles (tracking pixels,
+  // external-resource exfil, CSS keylogger backgrounds).
+  out = out.replace(/url\s*\([^)]*\)/gi, "")
 
   // Final pass through DOMPurify with an allowlist. The regex preprocessing
   // above handles Beehiiv-specific layout/colour cleanup; DOMPurify catches
   // everything the regex misses (event handlers, javascript: URLs, <iframe>,
   // <object>, <embed>, malformed tags, etc).
-  return DOMPurify.sanitize(out, {
+  const clean = DOMPurify.sanitize(out, {
     ALLOWED_TAGS: [
       "div", "span", "p", "br", "hr",
       "h1", "h2", "h3", "h4", "h5", "h6",
@@ -96,19 +99,42 @@ export function sanitizeBeehiivHtml(html: string): string {
       "ul", "ol", "li",
       "blockquote", "code", "pre",
       "strong", "em", "b", "i", "u", "s", "mark", "small", "sub", "sup",
-      "svg", "path", "g", "circle", "rect", "line", "polyline", "polygon", "defs", "title", "tspan", "text",
     ],
     ALLOWED_ATTR: [
       "href", "target", "rel", "title",
       "src", "srcset", "alt", "width", "height", "loading",
       "id", "class", "style",
-      "viewBox", "fill", "fill-opacity", "stroke", "stroke-width", "stroke-linecap", "stroke-linejoin",
-      "d", "cx", "cy", "r", "x", "y", "x1", "y1", "x2", "y2", "points", "xmlns", "transform",
     ],
-    ALLOWED_URI_REGEXP: /^(?:https?:|mailto:|tel:|#|\/)/i,
-    FORBID_TAGS: ["script", "iframe", "object", "embed", "form", "input", "button", "style", "link", "meta"],
+    // https only for http(s); no protocol-relative `//evil.com`. Single-slash
+    // relative paths still pass via the `\/(?!\/)` branch.
+    ALLOWED_URI_REGEXP: /^(?:https:|mailto:|tel:|#|\/(?!\/))/i,
+    FORBID_TAGS: [
+      "script", "iframe", "object", "embed", "form", "input", "button",
+      "style", "link", "meta", "svg", "math", "foreignObject",
+    ],
     FORBID_ATTR: ["onerror", "onclick", "onload", "onmouseover", "onfocus", "onblur"],
   })
+
+  // Post-process: enforce rel="noopener noreferrer" on every target="_blank"
+  // anchor so survived links can't break the noopener guarantee.
+  return clean.replace(
+    /<a\b([^>]*?)\btarget=("|')_blank\2([^>]*)>/gi,
+    (match, before, _q, after) => {
+      const attrs = `${before} ${after}`
+      if (/\brel\s*=/.test(attrs)) {
+        return match.replace(
+          /\brel\s*=\s*("|')([^"']*)\1/i,
+          (_m, q, val) => {
+            const parts = new Set(val.split(/\s+/).filter(Boolean))
+            parts.add("noopener")
+            parts.add("noreferrer")
+            return `rel=${q}${Array.from(parts).join(" ")}${q}`
+          },
+        )
+      }
+      return `<a${before} target="_blank" rel="noopener noreferrer"${after}>`
+    },
+  )
 }
 
 type ListPostsResponse = {
@@ -195,7 +221,7 @@ export async function getPostBySlug(slug: string): Promise<BeehiivPost | null> {
 
 export type SubscribeResult =
   | { ok: true; status: "active" | "pending" | "validating" | string }
-  | { ok: false; error: string }
+  | { ok: false; error: string; kind: "validation" | "upstream" }
 
 /**
  * Create a subscription on the publication. Beehiiv's double-opt-in / welcome
@@ -204,7 +230,7 @@ export type SubscribeResult =
 export async function createSubscription(email: string): Promise<SubscribeResult> {
   const { apiKey, publicationId } = getEnv()
   if (!apiKey || !publicationId) {
-    return { ok: false, error: "Subscribe is temporarily unavailable." }
+    return { ok: false, kind: "upstream", error: "Subscribe is temporarily unavailable." }
   }
 
   try {
@@ -228,11 +254,18 @@ export async function createSubscription(email: string): Promise<SubscribeResult
       // so we don't expose internals or vary copy by Beehiiv's HTTP status.
       const text = await res.text().catch(() => "")
       console.error("[beehiiv] subscribe failed", res.status, text)
-      const safe =
-        res.status === 400
-          ? "That email doesn't look right. Try again?"
-          : "Subscribe is temporarily unavailable. Try again in a moment?"
-      return { ok: false, error: safe }
+      if (res.status === 400 || res.status === 422) {
+        return {
+          ok: false,
+          kind: "validation",
+          error: "That email doesn't look right. Try again?",
+        }
+      }
+      return {
+        ok: false,
+        kind: "upstream",
+        error: "Subscribe is temporarily unavailable. Try again in a moment?",
+      }
     }
     const json = (await res.json().catch(() => null)) as
       | { data?: { status?: string } }
@@ -240,7 +273,11 @@ export async function createSubscription(email: string): Promise<SubscribeResult
     return { ok: true, status: json?.data?.status ?? "pending" }
   } catch (err) {
     console.error("[beehiiv] subscribe network error", err)
-    return { ok: false, error: "Subscribe is temporarily unavailable. Try again in a moment?" }
+    return {
+      ok: false,
+      kind: "upstream",
+      error: "Subscribe is temporarily unavailable. Try again in a moment?",
+    }
   }
 }
 
