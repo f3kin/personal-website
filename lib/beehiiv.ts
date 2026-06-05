@@ -74,6 +74,15 @@ export function sanitizeBeehiivHtml(html: string): string {
   // Pure-JS allowlist sanitiser (no jsdom  -  works on Vercel serverless).
   // sanitize-html strips `on*` handlers and unknown attributes by default;
   // we explicitly opt every attribute and every URL scheme back in.
+  // Mark the very first <img> as eager + high fetch priority so it loads
+  // immediately as a hero rather than queueing behind the rest.
+  let first = true
+  out = out.replace(/<img\b([^>]*)>/i, (_m, attrs) => {
+    if (!first) return `<img${attrs}>`
+    first = false
+    return `<img${attrs} fetchpriority="high" loading="eager" decoding="async">`
+  })
+
   const clean = sanitizeHtml(out, {
     allowedTags: [
       "div", "span", "p", "br", "hr",
@@ -85,7 +94,11 @@ export function sanitizeBeehiivHtml(html: string): string {
     ],
     allowedAttributes: {
       a: ["href", "target", "rel", "title", "id", "class"],
-      img: ["src", "srcset", "alt", "width", "height", "loading", "id", "class"],
+      img: [
+        "src", "srcset", "alt", "width", "height",
+        "loading", "decoding", "fetchpriority",
+        "id", "class",
+      ],
       "*": ["id", "class", "title"],
     },
     // https only for http(s); explicit list keeps protocol-relative // URLs out.
@@ -131,16 +144,7 @@ function getEnv() {
  */
 export async function listPublishedPosts(opts: { limit?: number } = {}): Promise<BeehiivPost[]> {
   const { apiKey, publicationId } = getEnv()
-  console.log("[beehiiv] env state", {
-    hasKey: !!apiKey,
-    keyLen: apiKey?.length ?? 0,
-    pubId: publicationId,
-    nodeEnv: process.env.NODE_ENV,
-  })
-  if (!apiKey || !publicationId) {
-    console.error("[beehiiv] MISSING ENV VARS at runtime")
-    return []
-  }
+  if (!apiKey || !publicationId) return []
 
   const limit = Math.min(opts.limit ?? 25, 100)
   // Pass both possible "live" statuses; Beehiiv accounts vary on which they return.
@@ -153,21 +157,17 @@ export async function listPublishedPosts(opts: { limit?: number } = {}): Promise
   params.append("status[]", "confirmed")
   params.append("status[]", "published")
 
-  const url = `${API_BASE}/publications/${publicationId}/posts?${params}`
-  console.log("[beehiiv] list fetch", { url, hasKey: !!apiKey, keyLen: apiKey?.length })
-  const res = await fetch(url, {
-    headers: { Authorization: `Bearer ${apiKey}`, Accept: "application/json" },
-    next: { revalidate: 300 },
-  })
+  const res = await fetch(
+    `${API_BASE}/publications/${publicationId}/posts?${params}`,
+    {
+      headers: { Authorization: `Bearer ${apiKey}`, Accept: "application/json" },
+      next: { revalidate: 300 },
+    },
+  )
 
-  if (!res.ok) {
-    const errText = await res.text().catch(() => "")
-    console.error("[beehiiv] list failed", res.status, errText.slice(0, 300))
-    return []
-  }
+  if (!res.ok) return []
   const json = (await res.json()) as ListPostsResponse
   const posts = json.data ?? []
-  console.log("[beehiiv] list got", posts.length, posts.map(p => p.title))
 
   // Hide pre-relaunch Hourglass-branded issues. The newsletter relaunched as a
   // personal-brand publication in June 2026; everything before that ran under the

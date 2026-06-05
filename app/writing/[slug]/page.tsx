@@ -38,6 +38,14 @@ export default async function WritingPost({ params }: { params: Promise<Params> 
 
   return (
     <PageContent className="pt-16 sm:pt-24 pb-20">
+      {post.thumbnail_url ? (
+        <link
+          rel="preload"
+          as="image"
+          href={post.thumbnail_url}
+          fetchPriority="high"
+        />
+      ) : null}
       <article className="container mx-auto px-4">
         <div className="mx-auto max-w-2xl">
           <nav className="mb-8">
