@@ -9,7 +9,8 @@ export const metadata: Metadata = {
   description: "My weekly notes on AI and where the world's going.",
 }
 
-export const revalidate = 3600
+export const dynamic = "force-dynamic"
+export const revalidate = 300
 
 export default async function WritingPage() {
   const posts = await listPublishedPosts({ limit: 50 })

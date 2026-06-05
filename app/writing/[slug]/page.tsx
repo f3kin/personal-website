@@ -6,7 +6,8 @@ import SubscribeForm from "@/components/writing/subscribe-form"
 import AuthorCard from "@/components/writing/author-card"
 import { formatPostDate, getPostBySlug, sanitizeBeehiivHtml } from "@/lib/beehiiv"
 
-export const revalidate = 3600
+export const dynamic = "force-dynamic"
+export const revalidate = 300
 
 type Params = { slug: string }
 
