@@ -175,12 +175,15 @@
   .post-content pre code {
     @apply bg-transparent p-0;
   }
-  /* Collapse Beehiiv's top wrapper padding so content starts right under the author card. */
-  .post-content .rendered-post > div:first-child > div[style*="padding-top"] {
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
+  /* Beehiiv content arrives stripped of inline styles (security). Apply spacing
+     based on its structural markers (id="content-blocks", class="rendered-post"). */
+  .post-content .rendered-post {
+    @apply mx-auto max-w-none;
+  }
+  .post-content #content-blocks > div + div {
+    @apply mt-4;
   }
   .post-content #content-blocks > div:first-child {
-    padding-top: 0 !important;
+    @apply mt-0;
   }
 }

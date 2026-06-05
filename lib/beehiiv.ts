@@ -3,6 +3,15 @@
 
 import DOMPurify from "isomorphic-dompurify"
 
+// Module-level hook: enforce rel="noopener noreferrer" on every target="_blank"
+// anchor while the HTML is still a parsed DOM, so we don't depend on serialised
+// attribute format. Registered once; DOMPurify dedupes by reference.
+DOMPurify.addHook("afterSanitizeAttributes", (node) => {
+  if (node.nodeName === "A" && (node as Element).getAttribute("target") === "_blank") {
+    ;(node as Element).setAttribute("rel", "noopener noreferrer")
+  }
+})
+
 export type BeehiivPost = {
   id: string
   title: string
@@ -68,24 +77,8 @@ export function sanitizeBeehiivHtml(html: string): string {
     "",
   )
 
-  // Strip outer max-width container so content fills our column.
-  out = out.replace(/max-width:\s*672px;?/gi, "")
-
-  // Reduce the universal 40px side padding (email convention) down to 0.
-  out = out.replace(/padding-left:\s*40px;?/gi, "")
-  out = out.replace(/padding-right:\s*40px;?/gi, "")
-
-  // Kill inline colour + font-family rules so our CSS wins. Catches both the
-  // hardcoded fallbacks and the `var(--wt-*) !important` overrides.
-  out = out.replace(/color:\s*[^;"]+(?:\s*!important)?;?/gi, "")
-  out = out.replace(/font-family:\s*[^;"]+(?:\s*!important)?;?/gi, "")
-  out = out.replace(/background-color:\s*[^;"]+(?:\s*!important)?;?/gi, "")
-  // Drop inline font-size + line-height; let our CSS handle scale.
-  out = out.replace(/font-size:\s*[^;"]+(?:\s*!important)?;?/gi, "")
-  out = out.replace(/line-height:\s*[^;"]+(?:\s*!important)?;?/gi, "")
-  // Kill any `url(...)` references in inline styles (tracking pixels,
-  // external-resource exfil, CSS keylogger backgrounds).
-  out = out.replace(/url\s*\([^)]*\)/gi, "")
+  // No CSS-property cleanup needed any more: we strip `style` entirely below.
+  // .post-content CSS in globals.css governs spacing/layout/typography.
 
   // Final pass through DOMPurify with an allowlist. The regex preprocessing
   // above handles Beehiiv-specific layout/colour cleanup; DOMPurify catches
@@ -103,7 +96,7 @@ export function sanitizeBeehiivHtml(html: string): string {
     ALLOWED_ATTR: [
       "href", "target", "rel", "title",
       "src", "srcset", "alt", "width", "height", "loading",
-      "id", "class", "style",
+      "id", "class",
     ],
     // https only for http(s); no protocol-relative `//evil.com`. Single-slash
     // relative paths still pass via the `\/(?!\/)` branch.
@@ -112,29 +105,10 @@ export function sanitizeBeehiivHtml(html: string): string {
       "script", "iframe", "object", "embed", "form", "input", "button",
       "style", "link", "meta", "svg", "math", "foreignObject",
     ],
-    FORBID_ATTR: ["onerror", "onclick", "onload", "onmouseover", "onfocus", "onblur"],
+    FORBID_ATTR: ["style", "onerror", "onclick", "onload", "onmouseover", "onfocus", "onblur"],
   })
 
-  // Post-process: enforce rel="noopener noreferrer" on every target="_blank"
-  // anchor so survived links can't break the noopener guarantee.
-  return clean.replace(
-    /<a\b([^>]*?)\btarget=("|')_blank\2([^>]*)>/gi,
-    (match, before, _q, after) => {
-      const attrs = `${before} ${after}`
-      if (/\brel\s*=/.test(attrs)) {
-        return match.replace(
-          /\brel\s*=\s*("|')([^"']*)\1/i,
-          (_m, q, val) => {
-            const parts = new Set(val.split(/\s+/).filter(Boolean))
-            parts.add("noopener")
-            parts.add("noreferrer")
-            return `rel=${q}${Array.from(parts).join(" ")}${q}`
-          },
-        )
-      }
-      return `<a${before} target="_blank" rel="noopener noreferrer"${after}>`
-    },
-  )
+  return clean
 }
 
 type ListPostsResponse = {
