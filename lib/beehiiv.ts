@@ -14,15 +14,16 @@ function enforceAnchorRel(node: Element | Node) {
   }
 }
 
-// Stash the registration sentinel on globalThis so it survives HMR / repeat
-// module evaluation in dev and avoids stacking duplicate hooks.
+// Bind the registration sentinel to the DOMPurify instance itself, so the flag
+// dies with the instance. If HMR/tests swap DOMPurify, the new instance has no
+// flag → hooks re-register; the old instance is GC'd along with its flag.
 const HOOK_FLAG = Symbol.for("beehiiv.dompurify.hooks.v1")
-type WithFlag = typeof globalThis & { [HOOK_FLAG]?: boolean }
+type Tagged = typeof DOMPurify & { [HOOK_FLAG]?: boolean }
 function ensureBeehiivHooks() {
-  const g = globalThis as WithFlag
-  if (g[HOOK_FLAG]) return
+  const dp = DOMPurify as Tagged
+  if (dp[HOOK_FLAG]) return
   DOMPurify.addHook("afterSanitizeAttributes", enforceAnchorRel)
-  g[HOOK_FLAG] = true
+  dp[HOOK_FLAG] = true
 }
 
 export type BeehiivPost = {
