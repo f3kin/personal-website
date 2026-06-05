@@ -144,14 +144,21 @@ export async function listPublishedPosts(opts: { limit?: number } = {}): Promise
   params.append("status[]", "confirmed")
   params.append("status[]", "published")
 
-  const res = await fetch(`${API_BASE}/publications/${publicationId}/posts?${params}`, {
+  const url = `${API_BASE}/publications/${publicationId}/posts?${params}`
+  console.log("[beehiiv] list fetch", { url, hasKey: !!apiKey, keyLen: apiKey?.length })
+  const res = await fetch(url, {
     headers: { Authorization: `Bearer ${apiKey}`, Accept: "application/json" },
     next: { revalidate: 300 },
   })
 
-  if (!res.ok) return []
+  if (!res.ok) {
+    const errText = await res.text().catch(() => "")
+    console.error("[beehiiv] list failed", res.status, errText.slice(0, 300))
+    return []
+  }
   const json = (await res.json()) as ListPostsResponse
   const posts = json.data ?? []
+  console.log("[beehiiv] list got", posts.length, posts.map(p => p.title))
 
   // Hide pre-relaunch Hourglass-branded issues. The newsletter relaunched as a
   // personal-brand publication in June 2026; everything before that ran under the
