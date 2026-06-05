@@ -3,14 +3,23 @@
 
 import DOMPurify from "isomorphic-dompurify"
 
-// Module-level hook: enforce rel="noopener noreferrer" on every target="_blank"
-// anchor while the HTML is still a parsed DOM, so we don't depend on serialised
-// attribute format. Registered once; DOMPurify dedupes by reference.
-DOMPurify.addHook("afterSanitizeAttributes", (node) => {
-  if (node.nodeName === "A" && (node as Element).getAttribute("target") === "_blank") {
-    ;(node as Element).setAttribute("rel", "noopener noreferrer")
+// Stable named hook so we can register exactly once via the flag below,
+// even under HMR / repeat module evaluation in dev.
+function enforceAnchorRel(node: Element | Node) {
+  if (node.nodeName === "A") {
+    const el = node as Element
+    if (el.getAttribute("target") === "_blank") {
+      el.setAttribute("rel", "noopener noreferrer")
+    }
   }
-})
+}
+
+let beehiivHooksRegistered = false
+function ensureBeehiivHooks() {
+  if (beehiivHooksRegistered) return
+  DOMPurify.addHook("afterSanitizeAttributes", enforceAnchorRel)
+  beehiivHooksRegistered = true
+}
 
 export type BeehiivPost = {
   id: string
@@ -52,6 +61,7 @@ export function slugFromWebUrl(webUrl?: string | null): string | null {
  * our site's typography and theme.
  */
 export function sanitizeBeehiivHtml(html: string): string {
+  ensureBeehiivHooks()
   let out = html
 
   // Drop embedded stylesheets, scripts, and font/preconnect links.
@@ -105,7 +115,9 @@ export function sanitizeBeehiivHtml(html: string): string {
       "script", "iframe", "object", "embed", "form", "input", "button",
       "style", "link", "meta", "svg", "math", "foreignObject",
     ],
-    FORBID_ATTR: ["style", "onerror", "onclick", "onload", "onmouseover", "onfocus", "onblur"],
+    // DOMPurify strips all `on*` handlers by default; we add `style` here
+     // because it isn't an event attribute and needs explicit forbidding.
+    FORBID_ATTR: ["style"],
   })
 
   return clean
