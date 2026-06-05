@@ -14,11 +14,15 @@ function enforceAnchorRel(node: Element | Node) {
   }
 }
 
-let beehiivHooksRegistered = false
+// Stash the registration sentinel on globalThis so it survives HMR / repeat
+// module evaluation in dev and avoids stacking duplicate hooks.
+const HOOK_FLAG = Symbol.for("beehiiv.dompurify.hooks.v1")
+type WithFlag = typeof globalThis & { [HOOK_FLAG]?: boolean }
 function ensureBeehiivHooks() {
-  if (beehiivHooksRegistered) return
+  const g = globalThis as WithFlag
+  if (g[HOOK_FLAG]) return
   DOMPurify.addHook("afterSanitizeAttributes", enforceAnchorRel)
-  beehiivHooksRegistered = true
+  g[HOOK_FLAG] = true
 }
 
 export type BeehiivPost = {
