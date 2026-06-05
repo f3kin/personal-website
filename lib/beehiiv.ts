@@ -131,7 +131,16 @@ function getEnv() {
  */
 export async function listPublishedPosts(opts: { limit?: number } = {}): Promise<BeehiivPost[]> {
   const { apiKey, publicationId } = getEnv()
-  if (!apiKey || !publicationId) return []
+  console.log("[beehiiv] env state", {
+    hasKey: !!apiKey,
+    keyLen: apiKey?.length ?? 0,
+    pubId: publicationId,
+    nodeEnv: process.env.NODE_ENV,
+  })
+  if (!apiKey || !publicationId) {
+    console.error("[beehiiv] MISSING ENV VARS at runtime")
+    return []
+  }
 
   const limit = Math.min(opts.limit ?? 25, 100)
   // Pass both possible "live" statuses; Beehiiv accounts vary on which they return.
