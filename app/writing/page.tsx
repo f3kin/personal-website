@@ -1,8 +1,7 @@
-import Link from "next/link"
 import type { Metadata } from "next"
-import { LINKS } from "@/lib/links"
 import PageContent from "@/components/layout/page-content"
 import IssueList from "@/components/writing/issue-list"
+import SubscribeForm from "@/components/writing/subscribe-form"
 import { listPublishedPosts } from "@/lib/beehiiv"
 
 export const metadata: Metadata = {
@@ -28,28 +27,21 @@ export default async function WritingPage() {
             </p>
           </header>
 
-          {posts.length === 0 ? <EmptyState /> : <IssueList posts={posts} />}
+          {posts.length === 0 ? (
+            <div className="rounded-lg border border-dashed border-border/60 p-8 text-center mb-12">
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                The first issue lands this Friday.
+              </p>
+            </div>
+          ) : (
+            <div className="mb-16">
+              <IssueList posts={posts} />
+            </div>
+          )}
+
+          <SubscribeForm />
         </div>
       </section>
     </PageContent>
-  )
-}
-
-function EmptyState() {
-  return (
-    <div className="rounded-lg border border-dashed border-border/60 p-8 text-center">
-      <p className="text-sm text-muted-foreground leading-relaxed">
-        The first issue lands this Friday.
-        <br />
-        <Link
-          href={LINKS.newsletter.subscribe}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-2 inline-block text-foreground underline underline-offset-4 hover:text-primary transition-colors"
-        >
-          Subscribe to be the first to read it
-        </Link>
-      </p>
-    </div>
   )
 }

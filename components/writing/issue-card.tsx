@@ -1,10 +1,11 @@
 import Image from "next/image"
 import Link from "next/link"
 import { LINKS } from "@/lib/links"
-import { formatPostDate, type BeehiivPost } from "@/lib/beehiiv"
+import { formatPostDate, slugFromWebUrl, type BeehiivPost } from "@/lib/beehiiv"
 
 export default function IssueCard({ post }: { post: BeehiivPost }) {
-  const href = post.web_url ?? LINKS.newsletter.site
+  const slug = slugFromWebUrl(post.web_url)
+  const href = slug ? `/writing/${slug}` : (post.web_url ?? LINKS.newsletter.site)
   const isExternal = href.startsWith("http")
 
   return (
@@ -24,7 +25,7 @@ export default function IssueCard({ post }: { post: BeehiivPost }) {
           unoptimized={post.thumbnail_url.startsWith("http")}
         />
       ) : null}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
       <div className="absolute inset-x-0 bottom-0 p-4">
         <time className="block text-[10px] uppercase tracking-[0.2em] text-white/70 mb-1.5">
           {formatPostDate(post)}

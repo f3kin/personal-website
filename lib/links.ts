@@ -14,8 +14,8 @@ export const LINKS = {
     writing: "https://medium.com/@finlayekins",
   },
   newsletter: {
-    site: "https://newsletter.finlayekins.com",
-    subscribe: "https://newsletter.finlayekins.com/subscribe",
+    site: "/writing",
+    subscribe: "/writing",
   },
   company: {
     hourglassAI: "https://www.thehourglass.ai",
