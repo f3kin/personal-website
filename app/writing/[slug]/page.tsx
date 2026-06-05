@@ -76,11 +76,11 @@ export default async function WritingPost({ params }: { params: Promise<Params> 
               className="post-content"
               dangerouslySetInnerHTML={{ __html: html }}
             />
-          ) : (
+          ) : post.web_url ? (
             <p className="text-muted-foreground">
               This post is available on the{" "}
               <a
-                href={post.web_url ?? "#"}
+                href={post.web_url}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="underline underline-offset-4"
@@ -89,6 +89,8 @@ export default async function WritingPost({ params }: { params: Promise<Params> 
               </a>
               .
             </p>
+          ) : (
+            <p className="text-muted-foreground">This issue isn&apos;t available right now.</p>
           )}
 
           <div className="mt-16">

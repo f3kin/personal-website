@@ -13,14 +13,19 @@ export default function SubscribeForm() {
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
-    if (!email) return
+    const trimmed = email.trim()
+    if (!trimmed) {
+      setStatus("error")
+      setMessage("Enter an email address.")
+      return
+    }
     setStatus("loading")
     setMessage(null)
     try {
       const res = await fetch("/api/subscribe", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email: trimmed }),
       })
       const json = (await res.json()) as { ok: boolean; error?: string; status?: string }
       if (!res.ok || !json.ok) {

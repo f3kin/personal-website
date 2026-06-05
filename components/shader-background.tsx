@@ -7,7 +7,7 @@ export default function ShaderBackground() {
   const preRef = useRef<HTMLPreElement>(null)
   const pathname = usePathname()
   // Hide on individual post pages (e.g. /writing/some-slug) for a cleaner read.
-  const hidden = /^\/writing\/[^/]+/.test(pathname || "")
+  const hidden = /^\/writing\/[^/]+\/?$/.test(pathname || "")
 
   useEffect(() => {
     if (hidden) return

@@ -24,9 +24,17 @@ export async function POST(req: Request) {
     )
   }
 
-  const result = await createSubscription(email)
-  if (!result.ok) {
-    return NextResponse.json(result, { status: 502 })
+  try {
+    const result = await createSubscription(email)
+    if (!result.ok) {
+      return NextResponse.json(result, { status: 502 })
+    }
+    return NextResponse.json(result)
+  } catch (err) {
+    console.error("[/api/subscribe] unexpected error", err)
+    return NextResponse.json(
+      { ok: false, error: "Subscribe is temporarily unavailable. Try again in a moment?" },
+      { status: 502 },
+    )
   }
-  return NextResponse.json(result)
 }

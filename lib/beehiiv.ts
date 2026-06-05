@@ -1,6 +1,8 @@
 // Beehiiv API v2 client. Server-side only  -  never expose the API key to the browser.
 // Docs: https://developers.beehiiv.com/api-reference
 
+import DOMPurify from "isomorphic-dompurify"
+
 export type BeehiivPost = {
   id: string
   title: string
@@ -82,7 +84,31 @@ export function sanitizeBeehiivHtml(html: string): string {
   out = out.replace(/font-size:\s*[^;"]+(?:\s*!important)?;?/gi, "")
   out = out.replace(/line-height:\s*[^;"]+(?:\s*!important)?;?/gi, "")
 
-  return out
+  // Final pass through DOMPurify with an allowlist. The regex preprocessing
+  // above handles Beehiiv-specific layout/colour cleanup; DOMPurify catches
+  // everything the regex misses (event handlers, javascript: URLs, <iframe>,
+  // <object>, <embed>, malformed tags, etc).
+  return DOMPurify.sanitize(out, {
+    ALLOWED_TAGS: [
+      "div", "span", "p", "br", "hr",
+      "h1", "h2", "h3", "h4", "h5", "h6",
+      "a", "img", "figure", "figcaption",
+      "ul", "ol", "li",
+      "blockquote", "code", "pre",
+      "strong", "em", "b", "i", "u", "s", "mark", "small", "sub", "sup",
+      "svg", "path", "g", "circle", "rect", "line", "polyline", "polygon", "defs", "title", "tspan", "text",
+    ],
+    ALLOWED_ATTR: [
+      "href", "target", "rel", "title",
+      "src", "srcset", "alt", "width", "height", "loading",
+      "id", "class", "style",
+      "viewBox", "fill", "fill-opacity", "stroke", "stroke-width", "stroke-linecap", "stroke-linejoin",
+      "d", "cx", "cy", "r", "x", "y", "x1", "y1", "x2", "y2", "points", "xmlns", "transform",
+    ],
+    ALLOWED_URI_REGEXP: /^(?:https?:|mailto:|tel:|#|\/)/i,
+    FORBID_TAGS: ["script", "iframe", "object", "embed", "form", "input", "button", "style", "link", "meta"],
+    FORBID_ATTR: ["onerror", "onclick", "onload", "onmouseover", "onfocus", "onblur"],
+  })
 }
 
 type ListPostsResponse = {
@@ -158,9 +184,13 @@ export async function getPostBySlug(slug: string): Promise<BeehiivPost | null> {
       next: { revalidate: 3600 },
     },
   )
+  // If the detail fetch fails, return the list-item shell so the page can still
+  // render the title/header  -  body will fall through to the "available on the
+  // newsletter site" notice instead of rendering an empty page.
   if (!res.ok) return match
   const json = (await res.json()) as { data: BeehiivPost }
-  return json.data ?? match
+  // Preserve list-item fields if the detail response is incomplete.
+  return { ...match, ...(json.data ?? {}) }
 }
 
 export type SubscribeResult =
@@ -177,29 +207,41 @@ export async function createSubscription(email: string): Promise<SubscribeResult
     return { ok: false, error: "Subscribe is temporarily unavailable." }
   }
 
-  const res = await fetch(`${API_BASE}/publications/${publicationId}/subscriptions`, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      "Content-Type": "application/json",
-      Accept: "application/json",
-    },
-    body: JSON.stringify({
-      email,
-      reactivate_existing: true,
-      send_welcome_email: true,
-      utm_source: "finlayekins.com",
-    }),
-  })
+  try {
+    const res = await fetch(`${API_BASE}/publications/${publicationId}/subscriptions`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        email,
+        reactivate_existing: true,
+        send_welcome_email: true,
+        utm_source: "finlayekins.com",
+      }),
+    })
 
-  if (!res.ok) {
-    const text = await res.text().catch(() => "")
-    return { ok: false, error: text || `Subscribe failed (${res.status}).` }
+    if (!res.ok) {
+      // Log the raw upstream response server-side; return a safe generic message
+      // so we don't expose internals or vary copy by Beehiiv's HTTP status.
+      const text = await res.text().catch(() => "")
+      console.error("[beehiiv] subscribe failed", res.status, text)
+      const safe =
+        res.status === 400
+          ? "That email doesn't look right. Try again?"
+          : "Subscribe is temporarily unavailable. Try again in a moment?"
+      return { ok: false, error: safe }
+    }
+    const json = (await res.json().catch(() => null)) as
+      | { data?: { status?: string } }
+      | null
+    return { ok: true, status: json?.data?.status ?? "pending" }
+  } catch (err) {
+    console.error("[beehiiv] subscribe network error", err)
+    return { ok: false, error: "Subscribe is temporarily unavailable. Try again in a moment?" }
   }
-  const json = (await res.json().catch(() => null)) as
-    | { data?: { status?: string } }
-    | null
-  return { ok: true, status: json?.data?.status ?? "pending" }
 }
 
 export function formatPostDate(post: BeehiivPost): string {
