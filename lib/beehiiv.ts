@@ -1,30 +1,7 @@
 // Beehiiv API v2 client. Server-side only  -  never expose the API key to the browser.
 // Docs: https://developers.beehiiv.com/api-reference
 
-import DOMPurify from "isomorphic-dompurify"
-
-// Stable named hook so we can register exactly once via the flag below,
-// even under HMR / repeat module evaluation in dev.
-function enforceAnchorRel(node: Element | Node) {
-  if (node.nodeName === "A") {
-    const el = node as Element
-    if (el.getAttribute("target") === "_blank") {
-      el.setAttribute("rel", "noopener noreferrer")
-    }
-  }
-}
-
-// Bind the registration sentinel to the DOMPurify instance itself, so the flag
-// dies with the instance. If HMR/tests swap DOMPurify, the new instance has no
-// flag → hooks re-register; the old instance is GC'd along with its flag.
-const HOOK_FLAG = Symbol.for("beehiiv.dompurify.hooks.v1")
-type Tagged = typeof DOMPurify & { [HOOK_FLAG]?: boolean }
-function ensureBeehiivHooks() {
-  const dp = DOMPurify as Tagged
-  if (dp[HOOK_FLAG]) return
-  DOMPurify.addHook("afterSanitizeAttributes", enforceAnchorRel)
-  dp[HOOK_FLAG] = true
-}
+import sanitizeHtml from "sanitize-html"
 
 export type BeehiivPost = {
   id: string
@@ -66,7 +43,6 @@ export function slugFromWebUrl(webUrl?: string | null): string | null {
  * our site's typography and theme.
  */
 export function sanitizeBeehiivHtml(html: string): string {
-  ensureBeehiivHooks()
   let out = html
 
   // Drop embedded stylesheets, scripts, and font/preconnect links.
@@ -95,12 +71,11 @@ export function sanitizeBeehiivHtml(html: string): string {
   // No CSS-property cleanup needed any more: we strip `style` entirely below.
   // .post-content CSS in globals.css governs spacing/layout/typography.
 
-  // Final pass through DOMPurify with an allowlist. The regex preprocessing
-  // above handles Beehiiv-specific layout/colour cleanup; DOMPurify catches
-  // everything the regex misses (event handlers, javascript: URLs, <iframe>,
-  // <object>, <embed>, malformed tags, etc).
-  const clean = DOMPurify.sanitize(out, {
-    ALLOWED_TAGS: [
+  // Pure-JS allowlist sanitiser (no jsdom  -  works on Vercel serverless).
+  // sanitize-html strips `on*` handlers and unknown attributes by default;
+  // we explicitly opt every attribute and every URL scheme back in.
+  const clean = sanitizeHtml(out, {
+    allowedTags: [
       "div", "span", "p", "br", "hr",
       "h1", "h2", "h3", "h4", "h5", "h6",
       "a", "img", "figure", "figcaption",
@@ -108,21 +83,26 @@ export function sanitizeBeehiivHtml(html: string): string {
       "blockquote", "code", "pre",
       "strong", "em", "b", "i", "u", "s", "mark", "small", "sub", "sup",
     ],
-    ALLOWED_ATTR: [
-      "href", "target", "rel", "title",
-      "src", "srcset", "alt", "width", "height", "loading",
-      "id", "class",
-    ],
-    // https only for http(s); no protocol-relative `//evil.com`. Single-slash
-    // relative paths still pass via the `\/(?!\/)` branch.
-    ALLOWED_URI_REGEXP: /^(?:https:|mailto:|tel:|#|\/(?!\/))/i,
-    FORBID_TAGS: [
-      "script", "iframe", "object", "embed", "form", "input", "button",
-      "style", "link", "meta", "svg", "math", "foreignObject",
-    ],
-    // DOMPurify strips all `on*` handlers by default; we add `style` here
-     // because it isn't an event attribute and needs explicit forbidding.
-    FORBID_ATTR: ["style"],
+    allowedAttributes: {
+      a: ["href", "target", "rel", "title", "id", "class"],
+      img: ["src", "srcset", "alt", "width", "height", "loading", "id", "class"],
+      "*": ["id", "class", "title"],
+    },
+    // https only for http(s); explicit list keeps protocol-relative // URLs out.
+    allowedSchemes: ["https", "mailto", "tel"],
+    allowedSchemesByTag: {},
+    allowedSchemesAppliedToAttributes: ["href", "src"],
+    allowProtocolRelative: false,
+    disallowedTagsMode: "discard",
+    transformTags: {
+      // Enforce rel="noopener noreferrer" on every target="_blank" link.
+      a: (tagName, attribs) => {
+        if (attribs.target === "_blank") {
+          attribs.rel = "noopener noreferrer"
+        }
+        return { tagName, attribs }
+      },
+    },
   })
 
   return clean
