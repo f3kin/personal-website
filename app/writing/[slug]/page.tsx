@@ -1,10 +1,16 @@
+import Image from "next/image"
 import Link from "next/link"
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import PageContent from "@/components/layout/page-content"
 import SubscribeForm from "@/components/writing/subscribe-form"
 import AuthorCard from "@/components/writing/author-card"
-import { formatPostDate, getPostBySlug, sanitizeBeehiivHtml } from "@/lib/beehiiv"
+import {
+  extractHeroFromHtml,
+  formatPostDate,
+  getPostBySlug,
+  sanitizeBeehiivHtml,
+} from "@/lib/beehiiv"
 
 export const dynamic = "force-dynamic"
 export const revalidate = 300
@@ -34,18 +40,11 @@ export default async function WritingPost({ params }: { params: Promise<Params> 
   const post = await getPostBySlug(slug)
   if (!post) notFound()
 
-  const html = sanitizeBeehiivHtml(post.content?.free?.web ?? "")
+  const sanitised = sanitizeBeehiivHtml(post.content?.free?.web ?? "")
+  const { heroUrl, html } = extractHeroFromHtml(sanitised)
 
   return (
     <PageContent className="pt-16 sm:pt-24 pb-20">
-      {post.thumbnail_url ? (
-        <link
-          rel="preload"
-          as="image"
-          href={post.thumbnail_url}
-          fetchPriority="high"
-        />
-      ) : null}
       <article className="container mx-auto px-4">
         <div className="mx-auto max-w-2xl">
           <nav className="mb-8">
@@ -76,9 +75,23 @@ export default async function WritingPost({ params }: { params: Promise<Params> 
             })()}
           </header>
 
-          <div className="mb-4">
+          <div className="mb-8">
             <AuthorCard />
           </div>
+
+          {heroUrl ? (
+            <div className="relative aspect-square mb-8 overflow-hidden rounded-lg bg-muted">
+              <Image
+                src={heroUrl}
+                alt={post.title}
+                fill
+                sizes="(min-width: 768px) 672px, 100vw"
+                priority
+                fetchPriority="high"
+                className="object-cover"
+              />
+            </div>
+          ) : null}
 
           {html ? (
             <div

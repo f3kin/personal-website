@@ -22,7 +22,6 @@ export default function IssueCard({ post }: { post: BeehiivPost }) {
           fill
           sizes="(min-width: 768px) 280px, (min-width: 640px) 50vw, 100vw"
           className="object-cover transition-transform duration-500 group-hover:scale-105"
-          unoptimized={post.thumbnail_url.startsWith("http")}
         />
       ) : null}
       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />

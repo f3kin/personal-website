@@ -1,3 +1,4 @@
+import Link from "next/link"
 import type { Metadata } from "next"
 import PageContent from "@/components/layout/page-content"
 import IssueList from "@/components/writing/issue-list"
@@ -19,6 +20,15 @@ export default async function WritingPage() {
     <PageContent className="pt-16 sm:pt-24 pb-20">
       <section className="container mx-auto px-4">
         <div className="mx-auto max-w-4xl">
+          <nav className="mb-8">
+            <Link
+              href="/"
+              className="text-[10px] sm:text-xs uppercase tracking-[0.3em] text-muted-foreground hover:text-foreground transition-colors"
+            >
+              ← Home
+            </Link>
+          </nav>
+
           <header className="mb-10 text-center">
             <h1 className="font-sans font-normal text-[10px] sm:text-xs uppercase tracking-[0.3em] text-primary mb-3 h-[1.5em]">
               Newsletter

@@ -72,17 +72,6 @@ export function sanitizeBeehiivHtml(html: string): string {
   // .post-content CSS in globals.css governs spacing/layout/typography.
 
   // Pure-JS allowlist sanitiser (no jsdom  -  works on Vercel serverless).
-  // sanitize-html strips `on*` handlers and unknown attributes by default;
-  // we explicitly opt every attribute and every URL scheme back in.
-  // Mark the very first <img> as eager + high fetch priority so it loads
-  // immediately as a hero rather than queueing behind the rest.
-  let first = true
-  out = out.replace(/<img\b([^>]*)>/i, (_m, attrs) => {
-    if (!first) return `<img${attrs}>`
-    first = false
-    return `<img${attrs} fetchpriority="high" loading="eager" decoding="async">`
-  })
-
   const clean = sanitizeHtml(out, {
     allowedTags: [
       "div", "span", "p", "br", "hr",
@@ -119,6 +108,23 @@ export function sanitizeBeehiivHtml(html: string): string {
   })
 
   return clean
+}
+
+/**
+ * Pull the first <img> URL out of the sanitised post HTML and return it
+ * separately, so the page can render it as a Next/Image hero (edge-cached,
+ * WebP-converted, correctly sized) and Next can automatically preload it.
+ *
+ * Beehiiv's first body image is always the post's hero. Doing this avoids:
+ * - Preloading a different URL than the body actually loads (S3 vs cdn-cgi)
+ * - Skipping Next/Image optimisation on the most-visible image on the page
+ * - Loading the same image twice (once as preload, once as body img)
+ */
+export function extractHeroFromHtml(html: string): { heroUrl: string | null; html: string } {
+  const match = html.match(/<img\b[^>]*\bsrc=["']([^"']+)["'][^>]*>/i)
+  if (!match) return { heroUrl: null, html }
+  const stripped = html.replace(match[0], "")
+  return { heroUrl: match[1], html: stripped }
 }
 
 type ListPostsResponse = {
