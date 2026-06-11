@@ -175,10 +175,21 @@ export async function listPublishedPosts(opts: { limit?: number } = {}): Promise
   const json = (await res.json()) as ListPostsResponse
   const posts = json.data ?? []
 
-  // Hide pre-relaunch Hourglass-branded issues. The newsletter relaunched as a
-  // personal-brand publication in June 2026; everything before that ran under the
-  // old "Hourglass Digital AI Newsletter" title and isn't part of the personal archive.
-  return posts.filter((p) => !/^Hourglass Digital AI Newsletter/i.test(p.title))
+  // Beehiiv's `status[]` query param is unreliable: drafts come back even when
+  // only `confirmed` is requested (observed 2026-06-11). Filter here instead,
+  // and require a publish_date in the past so scheduled-but-unsent posts
+  // (status `confirmed`, future publish_date) don't appear before send time.
+  const now = Math.floor(Date.now() / 1000)
+  return posts.filter(
+    (p) =>
+      p.status !== "draft" &&
+      typeof p.publish_date === "number" &&
+      p.publish_date <= now &&
+      // Hide pre-relaunch Hourglass-branded issues. The newsletter relaunched as a
+      // personal-brand publication in June 2026; everything before that ran under the
+      // old "Hourglass Digital AI Newsletter" title and isn't part of the personal archive.
+      !/^Hourglass Digital AI Newsletter/i.test(p.title),
+  )
 }
 
 /**
