@@ -14,6 +14,8 @@ const nextConfig = {
       { protocol: 'https', hostname: 'images.unsplash.com' },
       { protocol: 'https', hostname: 'media.beehiiv.com' },
       { protocol: 'https', hostname: 'beehiiv-images-production.s3.amazonaws.com' },
+      { protocol: 'https', hostname: 'substackcdn.com' },
+      { protocol: 'https', hostname: 'substack-post-media.s3.amazonaws.com' },
     ],
   },
   async rewrites() {

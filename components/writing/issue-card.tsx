@@ -20,7 +20,8 @@ export default function IssueCard({ post }: { post: BeehiivPost }) {
           src={post.thumbnail_url}
           alt={post.title}
           fill
-          sizes="(min-width: 768px) 280px, (min-width: 640px) 50vw, 100vw"
+          sizes="(min-width: 768px) 560px, (min-width: 640px) 100vw, 100vw"
+          quality={90}
           className="object-cover transition-transform duration-500 group-hover:scale-105"
         />
       ) : null}
