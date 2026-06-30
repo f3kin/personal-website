@@ -161,7 +161,7 @@
     @apply border-l-2 border-primary/60 pl-5 italic text-muted-foreground;
   }
   .post-content img {
-    @apply rounded-lg my-6 max-w-full h-auto;
+    @apply block w-full h-auto rounded-lg my-6 mx-auto;
   }
   .post-content hr {
     @apply my-8 border-border/60;
