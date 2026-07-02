@@ -11,7 +11,6 @@ export const LINKS = {
   },
   content: {
     books: "https://finlay-ekins.notion.site/books",
-    writing: "https://medium.com/@finlayekins",
   },
   newsletter: {
     site: "/writing",
