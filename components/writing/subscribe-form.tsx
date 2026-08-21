@@ -6,6 +6,22 @@ import { Input } from "@/components/ui/input"
 
 type Status = "idle" | "loading" | "success" | "error"
 
+/**
+ * Read the UTM tags off the current URL so Beehiiv can attribute the signup to
+ * the channel that sent it. Without this every signup lands in one bucket and
+ * the acquisition report cannot tell X from LinkedIn from direct.
+ */
+function readUtms() {
+  if (typeof window === "undefined") return {}
+  const q = new URLSearchParams(window.location.search)
+  return {
+    utm_source: q.get("utm_source") ?? undefined,
+    utm_medium: q.get("utm_medium") ?? undefined,
+    utm_campaign: q.get("utm_campaign") ?? undefined,
+    referring_site: document.referrer || undefined,
+  }
+}
+
 export default function SubscribeForm() {
   const [email, setEmail] = useState("")
   const [status, setStatus] = useState<Status>("idle")
@@ -25,7 +41,7 @@ export default function SubscribeForm() {
       const res = await fetch("/api/subscribe", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: trimmed }),
+        body: JSON.stringify({ email: trimmed, ...readUtms() }),
       })
       const json = (await res.json()) as { ok: boolean; error?: string; status?: string }
       if (!res.ok || !json.ok) {
