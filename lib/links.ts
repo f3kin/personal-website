@@ -1,6 +1,9 @@
 export const LINKS = {
   site: {
-    base: "https://finlayekins.com",
+    // The apex 307s to www, so www is the canonical origin. Used for
+    // metadataBase, og:url, the sitemap and robots, which should all agree
+    // with the domain that actually serves the page.
+    base: "https://www.finlayekins.com",
   },
   social: {
     linkedin: "https://www.linkedin.com/in/finlayekins",
