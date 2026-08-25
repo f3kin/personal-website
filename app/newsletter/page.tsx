@@ -2,6 +2,7 @@ import Link from "next/link"
 import type { Metadata } from "next"
 import PageContent from "@/components/layout/page-content"
 import SubscribeHero from "@/components/writing/subscribe-hero"
+import WhatYouGet from "@/components/writing/what-you-get"
 import IssueList from "@/components/writing/issue-list"
 import { listPublishedPosts } from "@/lib/beehiiv"
 
@@ -20,14 +21,15 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic"
 export const revalidate = 300
 
-// Deliberately no nav beyond a single way back: this page has one job.
+// One job: convert. The only navigation is back home and through to the archive.
 export default async function NewsletterPage() {
-  const posts = await listPublishedPosts({ limit: 3 })
+  const posts = await listPublishedPosts({ limit: 4 })
+  const [latest, ...recent] = posts
 
   return (
-    <PageContent className="pt-16 sm:pt-24 pb-20">
+    <PageContent className="pt-16 sm:pt-24 pb-24">
       <section className="container mx-auto px-4">
-        <div className="mx-auto max-w-4xl">
+        <div className="mx-auto max-w-5xl">
           <nav className="mb-12">
             <Link
               href="/"
@@ -37,20 +39,24 @@ export default async function NewsletterPage() {
             </Link>
           </nav>
 
-          <SubscribeHero />
+          <SubscribeHero latest={latest} />
 
-          {posts.length > 0 ? (
-            <div className="mt-20">
-              <h2 className="font-sans font-normal text-[10px] sm:text-xs uppercase tracking-[0.3em] text-muted-foreground mb-6">
+          <div className="mt-20 sm:mt-24">
+            <WhatYouGet />
+          </div>
+
+          {recent.length > 0 ? (
+            <div className="mt-20 sm:mt-24">
+              <h2 className="font-sans text-[10px] sm:text-xs uppercase tracking-[0.3em] text-muted-foreground mb-6">
                 Recent issues
               </h2>
-              <IssueList posts={posts} />
+              <IssueList posts={recent} />
               <p className="mt-8">
                 <Link
                   href="/writing"
-                  className="text-sm text-muted-foreground hover:text-foreground transition-colors underline underline-offset-4"
+                  className="text-sm text-muted-foreground hover:text-foreground transition-colors underline underline-offset-4 decoration-border"
                 >
-                  Read the full archive
+                  Read the full archive →
                 </Link>
               </p>
             </div>

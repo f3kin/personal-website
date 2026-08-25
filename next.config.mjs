@@ -39,10 +39,7 @@ const nextConfig = {
 
     return [
       subscribeLink('/x', 'x', 'bio', 'x-bio'),
-      subscribeLink('/x/pinned', 'x', 'pinned', 'x-pinned'),
-      subscribeLink('/li', 'linkedin', 'featured', 'li-featured'),
-      subscribeLink('/li/about', 'linkedin', 'about', 'li-about'),
-      subscribeLink('/li/comment', 'linkedin', 'post-comment', 'li-comment'),
+      subscribeLink('/li', 'linkedin', 'profile', 'li-profile'),
       // The old beehiiv-hosted subdomain. Its DNS record was removed at some
       // point, so every link pointing there is currently dead. Once the domain
       // is attached to this Vercel project these rules resurrect them.
