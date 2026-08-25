@@ -14,7 +14,7 @@ export const LINKS = {
   },
   newsletter: {
     site: "/writing",
-    subscribe: "/writing",
+    subscribe: "/newsletter",
   },
   company: {
     hourglassAI: "https://www.thehourglass.ai",

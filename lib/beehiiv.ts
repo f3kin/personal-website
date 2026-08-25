@@ -227,11 +227,31 @@ export type SubscribeResult =
   | { ok: true; status: "active" | "pending" | "validating" | string }
   | { ok: false; error: string; kind: "validation" | "upstream" }
 
+/** Where a signup came from, read off the landing URL's query string. */
+export type SubscriptionAttribution = {
+  utm_source?: string
+  utm_medium?: string
+  utm_campaign?: string
+  referring_site?: string
+}
+
+// Beehiiv treats UTM values as case-sensitive and does not infer them for API
+// signups, so normalise here rather than trusting whatever the link carried.
+const clean = (v: string | undefined, max = 100) =>
+  v?.trim().toLowerCase().slice(0, max) || undefined
+
 /**
  * Create a subscription on the publication. Beehiiv's double-opt-in / welcome
  * email behaviour depends on the publication's dashboard settings.
+ *
+ * Attribution comes from the visitor's own UTM parameters. Falling back to
+ * "website" rather than a fixed hostname keeps tagged traffic (x, linkedin)
+ * distinguishable in Beehiiv's acquisition report.
  */
-export async function createSubscription(email: string): Promise<SubscribeResult> {
+export async function createSubscription(
+  email: string,
+  attribution: SubscriptionAttribution = {},
+): Promise<SubscribeResult> {
   const { apiKey, publicationId } = getEnv()
   if (!apiKey || !publicationId) {
     return { ok: false, kind: "upstream", error: "Subscribe is temporarily unavailable." }
@@ -249,7 +269,12 @@ export async function createSubscription(email: string): Promise<SubscribeResult
         email,
         reactivate_existing: true,
         send_welcome_email: true,
-        utm_source: "finlayekins.com",
+        utm_source: clean(attribution.utm_source) ?? "website",
+        utm_medium: clean(attribution.utm_medium) ?? "subscribe-form",
+        utm_campaign: clean(attribution.utm_campaign) ?? "finlayekins.com",
+        ...(attribution.referring_site
+          ? { referring_site: clean(attribution.referring_site, 255) }
+          : {}),
       }),
     })
 
