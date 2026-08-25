@@ -2,7 +2,6 @@ import Link from "next/link"
 import type { Metadata } from "next"
 import PageContent from "@/components/layout/page-content"
 import SubscribeHero from "@/components/writing/subscribe-hero"
-import WhatYouGet from "@/components/writing/what-you-get"
 import IssueList from "@/components/writing/issue-list"
 import { listPublishedPosts } from "@/lib/beehiiv"
 
@@ -21,7 +20,7 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic"
 export const revalidate = 300
 
-// One job: convert. The only navigation is back home and through to the archive.
+// One job: convert. Two blocks only, the pitch and proof it is real and regular.
 export default async function NewsletterPage() {
   const posts = await listPublishedPosts({ limit: 4 })
   const [latest, ...recent] = posts
@@ -41,24 +40,20 @@ export default async function NewsletterPage() {
 
           <SubscribeHero latest={latest} />
 
-          <div className="mt-20 sm:mt-24">
-            <WhatYouGet />
-          </div>
-
           {recent.length > 0 ? (
-            <div className="mt-20 sm:mt-24">
-              <h2 className="font-sans text-[10px] sm:text-xs uppercase tracking-[0.3em] text-muted-foreground mb-6">
-                Recent issues
-              </h2>
-              <IssueList posts={recent} />
-              <p className="mt-8">
+            <div className="mt-20 sm:mt-28">
+              <div className="mb-6 flex items-baseline justify-between gap-4">
+                <h2 className="font-sans text-[10px] sm:text-xs uppercase tracking-[0.3em] text-muted-foreground">
+                  Recent issues
+                </h2>
                 <Link
                   href="/writing"
-                  className="text-sm text-muted-foreground hover:text-foreground transition-colors underline underline-offset-4 decoration-border"
+                  className="text-xs text-muted-foreground hover:text-foreground transition-colors"
                 >
-                  Read the full archive →
+                  Archive →
                 </Link>
-              </p>
+              </div>
+              <IssueList posts={recent} />
             </div>
           ) : null}
         </div>

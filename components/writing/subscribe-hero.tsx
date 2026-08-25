@@ -23,18 +23,13 @@ export default function SubscribeHero({ latest }: { latest?: BeehiivPost }) {
           building.
         </h1>
 
-        <p className="mt-6 text-base sm:text-lg leading-relaxed text-muted-foreground max-w-prose">
-          I&apos;m 23 and running an AI company out of Melbourne. Each week I
-          write down what caught my attention in AI, and what we shipped, broke
-          or rebuilt inside the business. First person, no press releases, about
-          a five minute read.
+        <p className="mt-5 text-base sm:text-lg leading-relaxed text-muted-foreground">
+          I&apos;m 23, running an AI company out of Melbourne, and writing down
+          what I learn. About five minutes.
         </p>
 
         <div className="mt-8">
           <SubscribeForm />
-          <p className="mt-3 text-xs text-muted-foreground">
-            Free. One email a week. Unsubscribe in one click.
-          </p>
         </div>
       </div>
 
@@ -55,16 +50,11 @@ export default function SubscribeHero({ latest }: { latest?: BeehiivPost }) {
             />
           ) : null}
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/15 to-transparent" />
-          <div className="absolute inset-x-0 top-0 p-4">
-            <span className="inline-block rounded-full bg-black/45 px-3 py-1 text-[10px] uppercase tracking-[0.2em] text-white/90 backdrop-blur-sm">
-              Latest issue
-            </span>
-          </div>
           <div className="absolute inset-x-0 bottom-0 p-5">
             <time className="block text-[10px] uppercase tracking-[0.2em] text-white/70 mb-1.5">
-              {formatPostDate(latest)}
+              Latest issue &middot; {formatPostDate(latest)}
             </time>
-            <h2 className="text-lg sm:text-xl font-medium leading-snug text-white line-clamp-3">
+            <h2 className="text-lg sm:text-xl font-medium leading-snug text-white line-clamp-2">
               {latest.title}
             </h2>
           </div>
