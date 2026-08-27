@@ -4,6 +4,13 @@ import { useEffect, useState } from "react"
 import Link from "next/link"
 import { LINKS } from "@/lib/links"
 
+// Inline link style for this page: a soft rounded chip with a blue underline,
+// so links read as tappable objects rather than as coloured words.
+const LINK_STYLE =
+  "rounded-md bg-primary/[0.07] px-1.5 py-0.5 text-foreground/90 " +
+  "underline decoration-primary/50 underline-offset-4 decoration-2 " +
+  "transition-colors hover:bg-primary/[0.14] hover:text-foreground hover:decoration-primary"
+
 const NAME = "Finlay Ekins"
 const LETTER_DELAY = 0.05
 const ANIM_DURATION = 0.4
@@ -58,12 +65,12 @@ export default function ExploreSection() {
                 href={LINKS.content.books}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="underline underline-offset-4"
+                className={LINK_STYLE}
               >
                 reading
               </Link>
               , and{" "}
-              <Link href="/writing" className="underline underline-offset-4">
+              <Link href="/writing" className={LINK_STYLE}>
                 writing
               </Link>
               .
@@ -74,7 +81,7 @@ export default function ExploreSection() {
                 href={LINKS.company.hourglassAI}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="underline underline-offset-4"
+                className={LINK_STYLE}
               >
                 Hourglass AI
               </Link>
@@ -90,7 +97,7 @@ export default function ExploreSection() {
             <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
               <Link
                 href={LINKS.newsletter.subscribe}
-                className="underline underline-offset-4"
+                className={LINK_STYLE}
               >
                 Read my newsletter
               </Link>
