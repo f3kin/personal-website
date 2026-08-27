@@ -153,12 +153,18 @@ export async function listPublishedPosts(opts: { limit?: number } = {}): Promise
   if (!apiKey || !publicationId) return []
 
   const limit = Math.min(opts.limit ?? 25, 100)
+  // Over-fetch, because the filtering below happens AFTER the request: drafts,
+  // scheduled-but-unsent posts and pre-relaunch issues all come back from the
+  // API and are stripped here. Asking Beehiiv for exactly `limit` therefore
+  // returns fewer than `limit` usable posts, which is how /newsletter ended up
+  // showing a single recent issue instead of three.
+  const fetchLimit = Math.min(limit * 4 + 8, 100)
   // Pass both possible "live" statuses; Beehiiv accounts vary on which they return.
   const params = new URLSearchParams({
     "expand[]": "free_web_content",
     order_by: "publish_date",
     direction: "desc",
-    limit: String(limit),
+    limit: String(fetchLimit),
   })
   params.append("status[]", "confirmed")
   params.append("status[]", "published")
@@ -180,7 +186,7 @@ export async function listPublishedPosts(opts: { limit?: number } = {}): Promise
   // and require a publish_date in the past so scheduled-but-unsent posts
   // (status `confirmed`, future publish_date) don't appear before send time.
   const now = Math.floor(Date.now() / 1000)
-  return posts.filter(
+  const live = posts.filter(
     (p) =>
       p.status !== "draft" &&
       typeof p.publish_date === "number" &&
@@ -190,6 +196,8 @@ export async function listPublishedPosts(opts: { limit?: number } = {}): Promise
       // old "Hourglass Digital AI Newsletter" title and isn't part of the personal archive.
       !/^Hourglass Digital AI Newsletter/i.test(p.title),
   )
+
+  return live.slice(0, limit)
 }
 
 /**
