@@ -1,8 +1,9 @@
 "use client"
 
-import { useState } from "react"
+import { useRef, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { ELAPSED_FIELD, HONEYPOT_FIELD } from "@/lib/subscribe-fields"
 
 type Status = "idle" | "loading" | "success" | "error"
 
@@ -26,6 +27,11 @@ export default function SubscribeForm() {
   const [email, setEmail] = useState("")
   const [status, setStatus] = useState<Status>("idle")
   const [message, setMessage] = useState<string | null>(null)
+  // When this component first rendered, so the server can reject submissions
+  // that arrive faster than a person could plausibly type an address.
+  const mountedAt = useRef(Date.now())
+  // Honeypot: hidden from people, filled in by bots that populate every input.
+  const [honeypot, setHoneypot] = useState("")
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -41,7 +47,12 @@ export default function SubscribeForm() {
       const res = await fetch("/api/subscribe", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: trimmed, ...readUtms() }),
+        body: JSON.stringify({
+          email: trimmed,
+          [HONEYPOT_FIELD]: honeypot,
+          [ELAPSED_FIELD]: Date.now() - mountedAt.current,
+          ...readUtms(),
+        }),
       })
       const json = (await res.json()) as { ok: boolean; error?: string; status?: string }
       if (!res.ok || !json.ok) {
@@ -65,6 +76,23 @@ export default function SubscribeForm() {
   return (
     <div>
       <form onSubmit={onSubmit} className="flex flex-col sm:flex-row gap-3">
+        {/*
+          Honeypot. Kept out of the layout and out of the accessibility tree, and
+          off the tab order, so no real user (screen reader included) can reach it.
+          `hidden` alone is skipped by some bots, so pair it with aria-hidden.
+        */}
+        <div hidden aria-hidden="true">
+          <label htmlFor={HONEYPOT_FIELD}>Leave this field empty</label>
+          <input
+            id={HONEYPOT_FIELD}
+            name={HONEYPOT_FIELD}
+            type="text"
+            tabIndex={-1}
+            autoComplete="off"
+            value={honeypot}
+            onChange={(e) => setHoneypot(e.target.value)}
+          />
+        </div>
         <Input
           type="email"
           required
