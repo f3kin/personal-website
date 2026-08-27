@@ -52,17 +52,6 @@ export default function ExploreSection() {
           <div className="space-y-3">
             <AnimatedName />
 
-            {/* The page's only call to action, sitting directly under the name.
-                Styled as a quiet outline rather than a filled button: it should
-                read as an option, not as the point of the page. */}
-            <Link
-              href={LINKS.newsletter.subscribe}
-              className="inline-flex items-center gap-1.5 rounded-full border border-border/70 px-4 py-1.5 text-xs sm:text-sm text-muted-foreground transition-colors hover:border-border hover:text-foreground"
-            >
-              Read my newsletter
-              <span aria-hidden="true">→</span>
-            </Link>
-
             <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
               I love{" "}
               <Link
@@ -93,6 +82,18 @@ export default function ExploreSection() {
             </p>
             <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
               Talk to me about surfing, basketball, or philosophy.
+            </p>
+
+            {/* The page's only call to action. Plain text in the same style as
+                the links above it, so it sits with the sentences rather than
+                sitting on top of them. */}
+            <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
+              <Link
+                href={LINKS.newsletter.subscribe}
+                className="underline underline-offset-4"
+              >
+                Read my newsletter
+              </Link>
             </p>
           </div>
         </div>
