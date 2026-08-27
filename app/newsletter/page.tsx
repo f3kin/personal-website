@@ -21,8 +21,24 @@ export const dynamic = "force-dynamic"
 export const revalidate = 300
 
 // One job: convert. Two blocks only, the pitch and proof it is real and regular.
-export default async function NewsletterPage() {
-  const posts = await listPublishedPosts({ limit: 4 })
+export default async function NewsletterPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>
+}) {
+  // A rewrite keeps the short URL in the address bar, which means the client
+  // cannot read the UTMs off window.location any more. They arrive here
+  // instead, so the attribution is passed down explicitly.
+  const [posts, params] = await Promise.all([
+    listPublishedPosts({ limit: 4 }),
+    searchParams,
+  ])
+  const one = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v)
+  const attribution = {
+    utm_source: one(params.utm_source),
+    utm_medium: one(params.utm_medium),
+    utm_campaign: one(params.utm_campaign),
+  }
   const [latest, ...recent] = posts
 
   return (
@@ -38,7 +54,7 @@ export default async function NewsletterPage() {
             </Link>
           </nav>
 
-          <SubscribeHero latest={latest} />
+          <SubscribeHero latest={latest} attribution={attribution} />
 
           {recent.length > 0 ? (
             <div className="mt-20 sm:mt-28">

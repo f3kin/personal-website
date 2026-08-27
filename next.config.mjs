@@ -19,27 +19,27 @@ const nextConfig = {
     ],
   },
   async rewrites() {
+    // Short links for the newsletter, one per placement. These are REWRITES,
+    // not redirects: a redirect makes LinkedIn resolve the target and print the
+    // full tracking URL on its share card, which reads like spam. A rewrite
+    // keeps finlayekins.com/li visible while the page still receives the
+    // attribution it needs.
+    const subscribeLink = (path, source, medium, campaign) => ({
+      source: path,
+      destination: `/newsletter?utm_source=${source}&utm_medium=${medium}&utm_campaign=${campaign}`,
+    });
+
     return [
       {
         source: '/resume',
         destination: '/_resume.pdf',
       },
+      subscribeLink('/x', 'x', 'bio', 'x-bio'),
+      subscribeLink('/li', 'linkedin', 'profile', 'li-profile'),
     ];
   },
   async redirects() {
-    // Short links for the newsletter, one per placement, each carrying its own
-    // UTMs. beehiiv does not infer attribution for API signups, so the tags have
-    // to travel with the link or the acquisition report cannot tell the channels
-    // apart. Lowercase throughout: beehiiv treats UTM values as case-sensitive.
-    const subscribeLink = (path, source, medium, campaign) => ({
-      source: path,
-      destination: `/newsletter?utm_source=${source}&utm_medium=${medium}&utm_campaign=${campaign}`,
-      permanent: false,
-    });
-
     return [
-      subscribeLink('/x', 'x', 'bio', 'x-bio'),
-      subscribeLink('/li', 'linkedin', 'profile', 'li-profile'),
       // The old beehiiv-hosted subdomain. Its DNS record was removed at some
       // point, so every link pointing there is currently dead. Once the domain
       // is attached to this Vercel project these rules resurrect them.

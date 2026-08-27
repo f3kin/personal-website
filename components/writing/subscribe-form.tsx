@@ -23,7 +23,13 @@ function readUtms() {
   }
 }
 
-export default function SubscribeForm() {
+export default function SubscribeForm({
+  attribution,
+}: {
+  /** UTMs resolved on the server, for short links served by a rewrite where the
+      browser URL no longer carries them. Falls back to the URL when absent. */
+  attribution?: Record<string, string | undefined>
+} = {}) {
   const [email, setEmail] = useState("")
   const [status, setStatus] = useState<Status>("idle")
   const [message, setMessage] = useState<string | null>(null)

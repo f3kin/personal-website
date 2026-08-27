@@ -8,7 +8,13 @@ import { formatPostDate, slugFromWebUrl, type BeehiivPost } from "@/lib/beehiiv"
  * images are the most distinctive thing about the newsletter, so the page leads
  * with one rather than with a wall of type.
  */
-export default function SubscribeHero({ latest }: { latest?: BeehiivPost }) {
+export default function SubscribeHero({
+  latest,
+  attribution,
+}: {
+  latest?: BeehiivPost
+  attribution?: Record<string, string | undefined>
+}) {
   const slug = latest ? slugFromWebUrl(latest.web_url) : null
 
   return (
@@ -29,7 +35,7 @@ export default function SubscribeHero({ latest }: { latest?: BeehiivPost }) {
         </p>
 
         <div className="mt-8">
-          <SubscribeForm />
+          <SubscribeForm attribution={attribution} />
         </div>
       </div>
 
