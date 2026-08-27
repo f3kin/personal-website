@@ -4,6 +4,12 @@ import { useEffect, useState } from "react"
 import Link from "next/link"
 import { LINKS } from "@/lib/links"
 
+// Inline link style for this page: a soft rounded chip with a blue underline,
+// so links read as tappable objects rather than as coloured words.
+const LINK_STYLE =
+  "rounded-md bg-primary/[0.07] px-1.5 py-0.5 text-foreground/90 no-underline " +
+  "transition-colors hover:bg-primary/[0.14] hover:text-foreground"
+
 const NAME = "Finlay Ekins"
 const LETTER_DELAY = 0.05
 const ANIM_DURATION = 0.4
@@ -51,36 +57,49 @@ export default function ExploreSection() {
         <div className="flex flex-col items-center justify-center gap-3 text-center">
           <div className="space-y-3">
             <AnimatedName />
+
             <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
-              i love{" "}
+              I love{" "}
               <Link
                 href={LINKS.content.books}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="underline underline-offset-4"
+                className={LINK_STYLE}
               >
                 reading
               </Link>
               , and{" "}
-              <Link href="/writing" className="underline underline-offset-4">
+              <Link href="/writing" className={LINK_STYLE}>
                 writing
               </Link>
               .
             </p>
             <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
-              i spend my time running{" "}
+              I spend my time running{" "}
               <Link
                 href={LINKS.company.hourglassAI}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="underline underline-offset-4"
+                className={LINK_STYLE}
               >
-                hourglass ai
+                Hourglass AI
               </Link>
               .
             </p>
             <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
-              talk to me about surfing, basketball, or philosophy.
+              Talk to me about surfing, basketball, or philosophy.
+            </p>
+
+            {/* The page's only call to action. Plain text in the same style as
+                the links above it, so it sits with the sentences rather than
+                sitting on top of them. */}
+            <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
+              <Link
+                href={LINKS.newsletter.subscribe}
+                className={LINK_STYLE}
+              >
+                Read my newsletter
+              </Link>
             </p>
           </div>
         </div>
