@@ -7,9 +7,8 @@ import { LINKS } from "@/lib/links"
 // Inline link style for this page: a soft rounded chip with a blue underline,
 // so links read as tappable objects rather than as coloured words.
 const LINK_STYLE =
-  "rounded-md bg-primary/[0.07] px-1.5 py-0.5 text-foreground/90 " +
-  "underline decoration-primary/50 underline-offset-4 decoration-2 " +
-  "transition-colors hover:bg-primary/[0.14] hover:text-foreground hover:decoration-primary"
+  "rounded-md bg-primary/[0.07] px-1.5 py-0.5 text-foreground/90 no-underline " +
+  "transition-colors hover:bg-primary/[0.14] hover:text-foreground"
 
 const NAME = "Finlay Ekins"
 const LETTER_DELAY = 0.05
