@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server"
 import { createSubscription, type SubscriptionAttribution } from "@/lib/beehiiv"
+import { ELAPSED_FIELD, HONEYPOT_FIELD } from "@/lib/subscribe-fields"
+import { clientIp, guardSubscription } from "@/lib/subscribe-guard"
 
 export const runtime = "nodejs"
 
@@ -36,6 +38,20 @@ export async function POST(req: Request) {
       { ok: false, error: "Enter a valid email address." },
       { status: 400 },
     )
+  }
+
+  // Bot filters run after the address is known to be well-formed, so a
+  // rejection can be logged against its domain, and before Beehiiv is called,
+  // so junk never reaches the list.
+  const b = (body ?? {}) as Record<string, unknown>
+  const guard = guardSubscription({
+    email,
+    honeypot: b[HONEYPOT_FIELD],
+    elapsedMs: b[ELAPSED_FIELD],
+    ip: clientIp(req),
+  })
+  if (!guard.ok) {
+    return NextResponse.json({ ok: false, error: guard.error }, { status: guard.status })
   }
 
   try {
