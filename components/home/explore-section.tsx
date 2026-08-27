@@ -83,6 +83,21 @@ export default function ExploreSection() {
               talk to me about surfing, basketball, or philosophy.
             </p>
           </div>
+
+          {/* The only call to action on the page. Kept in the same lowercase
+              register as the lines above so it reads as one more sentence
+              rather than a banner. */}
+          <Link
+            href={LINKS.newsletter.subscribe}
+            className="group mt-5 inline-flex items-center gap-1.5 text-sm sm:text-base text-primary transition-colors hover:text-primary/80"
+          >
+            <span className="underline underline-offset-4 decoration-primary/30 group-hover:decoration-primary/60">
+              every friday i write about ai, and what we&apos;re building
+            </span>
+            <span aria-hidden="true" className="transition-transform group-hover:translate-x-0.5">
+              →
+            </span>
+          </Link>
         </div>
       </div>
     </section>
