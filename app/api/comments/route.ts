@@ -1,6 +1,7 @@
 import { createHash } from "node:crypto"
 import { NextResponse } from "next/server"
 import { guardComment } from "@/lib/comment-guard"
+import { notifyNewComment } from "@/lib/notify"
 import { ELAPSED_FIELD, HONEYPOT_FIELD } from "@/lib/subscribe-fields"
 import { clientIp } from "@/lib/subscribe-guard"
 import { supabaseAdmin } from "@/lib/supabase"
@@ -86,6 +87,10 @@ export async function POST(req: Request) {
       { status: 502 },
     )
   }
+
+  // Awaited so it isn't dropped when the serverless function returns, but
+  // notifyNewComment never throws: a failure here is logged, never surfaced.
+  await notifyNewComment({ id: data.id, slug, name: guard.value.name, body: guard.value.body })
 
   return NextResponse.json({ ok: true, comment: data })
 }
