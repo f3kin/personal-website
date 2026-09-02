@@ -5,6 +5,8 @@ import { notFound } from "next/navigation"
 import PageContent from "@/components/layout/page-content"
 import SubscribeForm from "@/components/writing/subscribe-form"
 import AuthorCard from "@/components/writing/author-card"
+import LikeButton from "@/components/writing/like-button"
+import CommentsSection from "@/components/writing/comments-section"
 import {
   extractHeroFromHtml,
   formatPostDate,
@@ -73,6 +75,9 @@ export default async function WritingPost({ params }: { params: Promise<Params> 
                 <p className="text-lg text-muted-foreground leading-relaxed">{sub}</p>
               ) : null
             })()}
+            <div className="mt-6">
+              <LikeButton slug={slug} />
+            </div>
           </header>
 
           <div className="mb-8">
@@ -114,6 +119,8 @@ export default async function WritingPost({ params }: { params: Promise<Params> 
           ) : (
             <p className="text-muted-foreground">This issue isn&apos;t available right now.</p>
           )}
+
+          <CommentsSection slug={slug} />
 
           <div className="mt-16">
             <SubscribeForm />
