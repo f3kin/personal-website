@@ -10,7 +10,7 @@
 
 import { Resend } from "resend"
 
-const NOTIFY_TO = "finlay@hourglassdigital.com.au"
+const NOTIFY_TO = "finlay@thehourglass.ai"
 // Resend's shared sandbox sender: works without a verified domain. Swap for
 // a verified finlayekins.com address once one is set up in Resend.
 const NOTIFY_FROM = "Finlay Ekins's site <onboarding@resend.dev>"

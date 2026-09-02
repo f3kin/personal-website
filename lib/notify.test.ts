@@ -30,7 +30,7 @@ describe("notifyNewComment", () => {
 
     expect(send).toHaveBeenCalledTimes(1)
     const payload = send.mock.calls[0][0] as { to: string; subject: string; text: string }
-    expect(payload.to).toBe("finlay@hourglassdigital.com.au")
+    expect(payload.to).toBe("finlay@thehourglass.ai")
     expect(payload.subject).toContain("issue-1")
     expect(payload.subject).toContain("Ada")
     expect(payload.text).toContain("Nice one")
