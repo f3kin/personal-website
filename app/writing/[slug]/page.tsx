@@ -75,9 +75,6 @@ export default async function WritingPost({ params }: { params: Promise<Params> 
                 <p className="text-lg text-muted-foreground leading-relaxed">{sub}</p>
               ) : null
             })()}
-            <div className="mt-6">
-              <LikeButton slug={slug} />
-            </div>
           </header>
 
           <div className="mb-8">
@@ -119,6 +116,11 @@ export default async function WritingPost({ params }: { params: Promise<Params> 
           ) : (
             <p className="text-muted-foreground">This issue isn&apos;t available right now.</p>
           )}
+
+          <div className="mt-10 flex items-center gap-4">
+            <LikeButton slug={slug} />
+            <span className="text-sm text-muted-foreground">Enjoyed this one? Say so, or leave a comment below.</span>
+          </div>
 
           <CommentsSection slug={slug} />
 
