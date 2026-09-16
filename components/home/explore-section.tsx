@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import Image from "next/image"
 import { LINKS } from "@/lib/links"
 
 // Inline link style for this page: a soft rounded chip with a blue underline,
@@ -15,6 +16,16 @@ const NEWSLETTER_SUBSCRIBE_URL =
 
 const NAME = "Finlay Ekins"
 const LETTER_DELAY = 0.05
+const FALLBACK_COVERS = [
+  { src: "/newsletter/home-cover-15.jpg", title: "Recent newsletter cover" },
+  { src: "/newsletter/home-cover-14.jpg", title: "Recent newsletter cover" },
+  { src: "/newsletter/home-cover-13.jpg", title: "Recent newsletter cover" },
+]
+
+type NewsletterCover = {
+  src: string
+  title: string
+}
 
 function AnimatedName() {
   return (
@@ -32,11 +43,56 @@ function AnimatedName() {
   )
 }
 
-export default function ExploreSection() {
+function NewsletterCoverStack({ covers }: { covers: NewsletterCover[] }) {
+  const visibleCovers = covers.length >= 3 ? covers : FALLBACK_COVERS
+
+  return (
+    <div
+      className="group relative mx-auto my-7 h-24 w-40 sm:my-9 sm:h-28 sm:w-48"
+      aria-label="Recent newsletter covers"
+    >
+      <div className="absolute left-0 top-3 h-20 w-20 rotate-[-8deg] overflow-hidden rounded-md shadow-md transition-transform duration-300 group-hover:rotate-[-11deg] sm:h-24 sm:w-24">
+        <Image
+          src={visibleCovers[2].src}
+          alt={visibleCovers[2].title}
+          fill
+          sizes="96px"
+          className="object-cover"
+        />
+      </div>
+      <div className="absolute right-0 top-3 h-20 w-20 rotate-[8deg] overflow-hidden rounded-md shadow-md transition-transform duration-300 group-hover:rotate-[11deg] sm:h-24 sm:w-24">
+        <Image
+          src={visibleCovers[1].src}
+          alt={visibleCovers[1].title}
+          fill
+          sizes="96px"
+          className="object-cover"
+        />
+      </div>
+      <div className="absolute left-1/2 top-0 h-24 w-24 -translate-x-1/2 overflow-hidden rounded-md shadow-lg ring-4 ring-background transition-transform duration-300 group-hover:-translate-x-1/2 group-hover:-translate-y-0.5 sm:h-28 sm:w-28">
+        <Image
+          src={visibleCovers[0].src}
+          alt={visibleCovers[0].title}
+          fill
+          priority
+          sizes="112px"
+          className="object-cover"
+        />
+      </div>
+    </div>
+  )
+}
+
+export default function ExploreSection({
+  newsletterCovers,
+}: {
+  newsletterCovers: NewsletterCover[]
+}) {
   return (
     <section className="container mx-auto flex min-h-[100svh] items-center px-5 py-12 sm:py-16">
       <div className="mx-auto w-full max-w-3xl text-center">
         <AnimatedName />
+        <NewsletterCoverStack covers={newsletterCovers} />
 
         <div className="mx-auto max-w-2xl">
           <h1 className="text-balance text-[2rem] font-medium leading-[1.12] tracking-[-0.03em] sm:text-5xl">
