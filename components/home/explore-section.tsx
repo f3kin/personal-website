@@ -1,6 +1,5 @@
 "use client"
 
-import { useEffect, useState } from "react"
 import Link from "next/link"
 import { LINKS } from "@/lib/links"
 
@@ -16,35 +15,14 @@ const NEWSLETTER_SUBSCRIBE_URL =
 
 const NAME = "Finlay Ekins"
 const LETTER_DELAY = 0.05
-const ANIM_DURATION = 0.4
-const VISIBLE_DURATION = 3000
-const HIDDEN_DURATION = 1500
 
 function AnimatedName() {
-  const [visible, setVisible] = useState(true)
-  const [cycle, setCycle] = useState(0)
-
-  useEffect(() => {
-    const totalAnimTime = NAME.length * LETTER_DELAY * 1000 + ANIM_DURATION * 1000
-
-    if (visible) {
-      const timer = setTimeout(() => setVisible(false), totalAnimTime + VISIBLE_DURATION)
-      return () => clearTimeout(timer)
-    } else {
-      const timer = setTimeout(() => {
-        setCycle((c) => c + 1)
-        setVisible(true)
-      }, totalAnimTime + HIDDEN_DURATION)
-      return () => clearTimeout(timer)
-    }
-  }, [visible])
-
   return (
     <p className="mb-5 h-[1.5em] text-[10px] uppercase tracking-[0.3em] text-primary sm:text-xs">
       {NAME.split("").map((char, i) => (
         <span
-          key={`${cycle}-${i}`}
-          className={`inline-block motion-reduce:animate-none motion-reduce:opacity-100 ${visible ? "opacity-0 animate-[fadeUp_0.4s_ease_forwards]" : "animate-[fadeDown_0.4s_ease_forwards]"}`}
+          key={i}
+          className="inline-block opacity-0 animate-[fadeUp_0.4s_ease_forwards] motion-reduce:animate-none motion-reduce:opacity-100"
           style={{ animationDelay: `${i * LETTER_DELAY}s` }}
         >
           {char === " " ? "\u00A0" : char}
