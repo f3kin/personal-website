@@ -35,7 +35,10 @@ export default function SubscribeHero({
         </p>
 
         <div className="mt-8">
-          <SubscribeForm attribution={attribution} />
+          <SubscribeForm
+            attribution={attribution}
+            latestHref={slug ? `/writing/${slug}` : undefined}
+          />
         </div>
       </div>
 

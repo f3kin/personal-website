@@ -1,5 +1,6 @@
 "use client"
 
+import Link from "next/link"
 import { useRef, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -25,10 +26,12 @@ function readUtms() {
 
 export default function SubscribeForm({
   attribution,
+  latestHref,
 }: {
   /** UTMs resolved on the server, for short links served by a rewrite where the
       browser URL no longer carries them. Falls back to the URL when absent. */
   attribution?: Record<string, string | undefined>
+  latestHref?: string
 } = {}) {
   const [email, setEmail] = useState("")
   const [status, setStatus] = useState<Status>("idle")
@@ -69,7 +72,7 @@ export default function SubscribeForm({
       setStatus("success")
       setMessage(
         json.status === "active"
-          ? "You're in. The next issue lands in your inbox."
+          ? "You're in."
           : "Check your inbox to confirm your subscription.",
       )
       setEmail("")
@@ -99,7 +102,11 @@ export default function SubscribeForm({
             onChange={(e) => setHoneypot(e.target.value)}
           />
         </div>
+        <label htmlFor="newsletter-email" className="sr-only">
+          Email address
+        </label>
         <Input
+          id="newsletter-email"
           type="email"
           required
           inputMode="email"
@@ -115,7 +122,11 @@ export default function SubscribeForm({
           disabled={status === "loading" || status === "success"}
           className="bg-primary/10 text-primary hover:bg-primary/20 focus-visible:ring-0 focus-visible:ring-offset-0"
         >
-          {status === "loading" ? "Subscribing…" : status === "success" ? "Subscribed" : "Subscribe"}
+          {status === "loading"
+            ? "Subscribing…"
+            : status === "success"
+              ? "Subscribed"
+              : "Get Friday's issue"}
         </Button>
       </form>
       {message ? (
@@ -125,7 +136,12 @@ export default function SubscribeForm({
             status === "error" ? "text-destructive" : "text-muted-foreground"
           }`}
         >
-          {message}
+          {message}{" "}
+          {status === "success" && latestHref && message === "You're in." ? (
+            <Link href={latestHref} className="underline underline-offset-4 hover:text-foreground">
+              Start with the latest issue while you wait for Friday.
+            </Link>
+          ) : null}
         </p>
       ) : null}
     </div>
