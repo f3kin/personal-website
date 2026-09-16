@@ -18,7 +18,7 @@ const LETTER_DELAY = 0.05
 
 function AnimatedName() {
   return (
-    <p className="mb-5 h-[1.5em] text-[10px] uppercase tracking-[0.3em] text-primary sm:text-xs">
+    <p className="mb-7 h-[1.5em] text-[10px] uppercase tracking-[0.34em] text-primary sm:mb-9 sm:text-xs">
       {NAME.split("").map((char, i) => (
         <span
           key={i}
@@ -34,36 +34,35 @@ function AnimatedName() {
 
 export default function ExploreSection() {
   return (
-    <section className="container mx-auto flex min-h-[100svh] items-center px-4 py-10 sm:py-14">
-      <div className="mx-auto w-full max-w-2xl text-center">
+    <section className="container mx-auto flex min-h-[100svh] items-center px-5 py-12 sm:py-16">
+      <div className="mx-auto w-full max-w-3xl text-center">
         <AnimatedName />
 
-        <div className="rounded-2xl border border-primary/20 bg-background/95 px-6 py-7 text-left shadow-sm sm:px-9 sm:py-9">
-          <p className="mb-3 text-sm font-medium text-primary">
-            My Friday newsletter
-          </p>
-          <h1 className="max-w-xl text-balance text-2xl font-medium leading-tight tracking-[-0.025em] sm:text-3xl">
+        <div className="mx-auto max-w-2xl">
+          <h1 className="text-balance text-[2rem] font-medium leading-[1.12] tracking-[-0.03em] sm:text-5xl">
             What I&apos;m seeing in AI, and what we&apos;re actually building.
           </h1>
-          <p className="mt-4 max-w-lg text-pretty text-sm leading-relaxed text-muted-foreground sm:text-base">
+          <p className="mx-auto mt-5 max-w-md text-pretty text-base leading-relaxed text-muted-foreground sm:mt-6 sm:text-lg">
             A useful five-minute note, every Friday.
           </p>
 
-          <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-3">
+          <div className="mt-7 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 sm:mt-8">
             <Link
               href={NEWSLETTER_SUBSCRIBE_URL}
-              className="inline-flex min-h-11 items-center justify-center rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+              className="inline-flex min-h-11 items-center justify-center rounded-md bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-colors duration-200 hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
             >
-              Subscribe
+              Get Friday&apos;s issue
             </Link>
             <Link
               href="/writing"
-              className="inline-flex min-h-11 items-center text-sm font-medium text-foreground underline decoration-primary/50 underline-offset-4 transition-colors hover:decoration-primary focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2"
+              className="inline-flex min-h-11 items-center gap-1 text-sm font-medium text-foreground underline decoration-primary/40 underline-offset-4 transition-colors duration-200 hover:decoration-primary focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2"
             >
-              Read my newsletter <span aria-hidden="true">→</span>
+              Read past issues <span aria-hidden="true">→</span>
             </Link>
           </div>
         </div>
+
+        <div aria-hidden="true" className="mx-auto mt-9 h-px w-12 bg-primary/30 sm:mt-11" />
 
         <div className="mt-7 space-y-3 sm:mt-8">
           <p className="text-sm leading-relaxed text-muted-foreground sm:text-base">
