@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next"
 import { listPublishedPosts, slugFromWebUrl } from "@/lib/beehiiv"
+import { getArticles } from "@/lib/articles"
 import { LINKS } from "@/lib/links"
 
 export const revalidate = 3600
@@ -12,6 +13,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${base}/newsletter`, changeFrequency: "weekly", priority: 0.9 },
     { url: `${base}/writing`, changeFrequency: "weekly", priority: 0.8 },
   ]
+
+  const articles: MetadataRoute.Sitemap = (await getArticles()).map((article) => ({
+    url: `${base}/articles/${article.slug}`,
+    lastModified: new Date(article.date),
+    changeFrequency: "yearly" as const,
+    priority: 0.7,
+  }))
 
   // Issue pages come from beehiiv, so a failed fetch must not take the whole
   // sitemap down with it.
@@ -35,5 +43,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // fall through with the static routes only
   }
 
-  return [...staticRoutes, ...issues]
+  return [...staticRoutes, ...articles, ...issues]
 }
