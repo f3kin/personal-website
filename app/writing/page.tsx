@@ -3,7 +3,7 @@ import type { Metadata } from "next"
 import PageContent from "@/components/layout/page-content"
 import IssueList from "@/components/writing/issue-list"
 import SubscribeForm from "@/components/writing/subscribe-form"
-import ExternalSection from "@/components/writing/external-section"
+import ExternalCard from "@/components/writing/external-card"
 import ArticleCard from "@/components/writing/article-card"
 import { listPublishedPosts } from "@/lib/beehiiv"
 import { getExternalPosts } from "@/lib/external-posts"
@@ -26,11 +26,16 @@ export default async function WritingPage() {
   ])
 
   // Substack cross-posts of hosted articles are the same piece; the hosted
-  // copy is canonical, so it alone appears here.
-  const otherPosts = withoutHostedDuplicates(
+  // copy is canonical, so it alone appears here. Hosted and external pieces
+  // share one date-sorted Articles grid.
+  const externalPosts = withoutHostedDuplicates(
     [...mediumPosts, ...substackPosts],
     articles,
-  ).sort((a, b) => b.date.localeCompare(a.date))
+  )
+  const allArticles = [
+    ...articles.map((article) => ({ kind: "hosted" as const, date: article.date, article })),
+    ...externalPosts.map((post) => ({ kind: "external" as const, date: post.date, post })),
+  ].sort((a, b) => b.date.localeCompare(a.date))
 
   return (
     <PageContent className="pt-16 sm:pt-24 pb-20">
@@ -63,26 +68,24 @@ export default async function WritingPage() {
             <IssueList posts={posts} />
           )}
 
-          {articles.length > 0 ? (
+          {allArticles.length > 0 ? (
             <section className="mt-16">
               <h2 className="font-sans font-normal text-[10px] sm:text-xs uppercase tracking-[0.3em] text-primary mb-6">
                 Articles
               </h2>
               <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
-                {articles.map((article) => (
-                  <li key={article.slug}>
-                    <ArticleCard article={article} />
+                {allArticles.map((item) => (
+                  <li key={item.kind === "hosted" ? item.article.slug : item.post.id}>
+                    {item.kind === "hosted" ? (
+                      <ArticleCard article={item.article} />
+                    ) : (
+                      <ExternalCard post={item.post} />
+                    )}
                   </li>
                 ))}
               </ul>
             </section>
           ) : null}
-
-          <ExternalSection
-            title="Other writing"
-            posts={otherPosts}
-            emptyText="Nothing to show here yet."
-          />
         </div>
       </section>
     </PageContent>
