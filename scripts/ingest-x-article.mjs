@@ -10,6 +10,7 @@
 
 import { mkdir, writeFile } from "node:fs/promises"
 import path from "node:path"
+import { makeSubstackCover } from "./substack-cover.mjs"
 
 const input = process.argv[2]
 if (!input) {
@@ -165,6 +166,8 @@ let cover = null
 if (coverSrc) {
   const ext = path.extname(new URL(coverSrc).pathname) || ".jpg"
   cover = await download(coverSrc, `cover${ext}`)
+  // Substack crops headers to 1.91:1; give it a reframed copy to paste in.
+  await makeSubstackCover(path.join(assetDir, `cover${ext}`))
 }
 
 const record = {
