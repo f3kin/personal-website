@@ -36,6 +36,7 @@ const nextConfig = {
       },
       subscribeLink('/x', 'x', 'bio', 'x-bio'),
       subscribeLink('/li', 'linkedin', 'profile', 'li-profile'),
+      subscribeLink('/li/comment', 'linkedin', 'comment', 'li-comment'),
     ];
   },
   async redirects() {
