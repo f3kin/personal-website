@@ -37,6 +37,9 @@ const nextConfig = {
       subscribeLink('/x', 'x', 'bio', 'x-bio'),
       subscribeLink('/li', 'linkedin', 'profile', 'li-profile'),
       subscribeLink('/li/comment', 'linkedin', 'comment', 'li-comment'),
+      // One link per X post: the first reply under each article or share post
+      // (finlayekins.com/x/<post-slug>), so signups show by post in Beehiiv.
+      subscribeLink('/x/:slug', 'x', 'post-reply', ':slug'),
     ];
   },
   async redirects() {
