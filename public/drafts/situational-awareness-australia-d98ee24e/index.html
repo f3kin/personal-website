@@ -14,8 +14,11 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); font-
   padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 2.5rem 5rem; }
 main { max-width: 41rem; margin: 0 auto; display: flex; flex-direction: column; gap: 1.15rem; }
 main > * { margin: 0; min-width: 0; }
-.note { border: 1px solid var(--line); border-radius: 6px; background: var(--wash); padding: 0.85rem 1rem; font-size: 0.9375rem; line-height: 1.5; }
-.note strong { color: var(--teal); }
+.byline { color: var(--muted); font-size: 0.9375rem; }
+.toc ul { list-style: none; padding: 1rem 0; border-block: 1px solid var(--line); gap: 0.3rem; }
+.toc a { font-family: var(--serif); font-size: 1.25rem; text-decoration: none; }
+.toc a:hover { text-decoration: underline; }
+h2 { scroll-margin-top: 1rem; }
 h1 { font-family: var(--serif); font-weight: 400; font-size: clamp(2.4rem, 7vw, 3.5rem); line-height: 1.05; text-wrap: balance; margin-top: 1.5rem; }
 h2 { font-family: var(--serif); font-weight: 400; font-size: clamp(1.75rem, 5vw, 2.25rem); line-height: 1.15; text-wrap: balance; margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid var(--line); }
 .claim { font-weight: 700; font-size: 1.1875rem; line-height: 1.4; margin-top: 0.75rem; }
@@ -33,13 +36,14 @@ mark { background: var(--mark); color: var(--ink); padding: 0 0.2em; border-radi
 </head>
 <body>
 <main>
-<p class="note"><strong>White paper draft for team review.</strong> Not published. This is the standalone essay; the X article will be the same text. Yellow marks are gaps Finlay is still filling. Send your thoughts to Finlay before Friday 20 November.</p>
 <h1>Situational Awareness for Australia</h1>
+<p class="byline">Finlay Ekins, Hourglass AI · November 2026 · <a href="situational-awareness-for-australia.pdf">Download as PDF</a></p>
+<nav class="toc" aria-label="Contents"><ul><li><a href="#i-where-ai-is-today">I. Where AI Is Today</a></li><li><a href="#ii-what-happens-next">II. What Happens Next</a></li><li><a href="#iii-why-australia">III. Why Australia</a></li><li><a href="#iv-the-objections">IV. The Objections</a></li><li><a href="#v-what-to-do-next">V. What To Do Next</a></li><li><a href="#a-letter-to-australia">A Letter to Australia</a></li></ul></nav>
 <p>In San Francisco, people talk about superintelligence like it is next year's product launch. In most Australian offices I walk into, the conversation is still whether staff are allowed to use ChatGPT.</p>
 <p>In 2023 I was still studying at Melbourne Uni when I first heard about ChatGPT. A friend had gotten an 82 on their assignment using it to write an essay, and I quickly realised that our current education system was going to become very irrelevant for a lot of white-collar fields. I soon went all in on AI, spending ten months trying and failing to make it big consulting how to use tools like ChatGPT, ending the year with the whopping revenue total of $28k. This year Hourglass had its first $100k month, and we hit a $1 million run rate in our first year as a company.</p>
 <p>The real winning differentiator in what we do was being able to harness the current AI models properly, and share that with businesses that were further behind. <strong>Today's models are immensely powerful, and most of Australia hasn't started using them properly yet.</strong></p>
 <p>Below is my attempt at writing a <a href="https://situational-awareness.ai/">Situational Awareness</a> for Australia: where AI is today, what happens next, and why we're one of the best-placed countries in the world to win from it, because I love this country and I want us to win.</p>
-<h2>I. Where AI Is Today</h2>
+<h2 id="i-where-ai-is-today">I. Where AI Is Today</h2>
 <p class="claim">We already have AGI, and most of the world can't see it yet. A small group of people use today's models for nearly all of their work, while about half of adults don't use an AI chatbot at all and fewer than one in twenty pay for one. The split started with software, because code was the first thing AI got really good at. Now anyone can build software in plain English, and that changes how every business works.</p>
 <p>Before I begin, I want to lay out three key terms and how I define them:</p>
 <ol><li>Artificial General Intelligence (AGI) - AI that can do most knowledge work.</li><li>Recursive Self-Improvement (RSI) - AI being able to build the next, more intelligent AI model autonomously.</li><li>Artificial Superintelligence (ASI) - AI that is smarter than every human at everything intelligence-based.</li></ol>
@@ -53,7 +57,7 @@ mark { background: var(--mark); color: var(--ink); padding: 0 0.2em; border-radi
 <p>This leaves us today in an incredibly interesting dynamic, where <strong>a small selection of the population has a near infinite supply of intelligent workers (AI agents) for US$200 a month, whilst for the rest of the world, nothing's changed.</strong></p>
 <p>The reason for this split is that the first place AI excelled was writing code, so those people who felt it first were in technical roles like software developers. If you don't write software, the last few years in AI mostly looked like a chatbot getting slightly smarter over time. If you do, it looked like your whole job changing in front of you. Claude Code is less than two years old. I haven't written code by hand in months, and Hourglass is a team of six that runs most of its admin and operations on agents overnight.</p>
 <p>The biggest revelation here is that <strong>anyone can now build near-perfect software by prompting an AI chatbot in plain English.</strong> We work with people who have never written a line of code and are shipping tools their company runs on. Software used to be something you bought and bent your business around. Now you describe what you want and you get it. Every business runs on software, so every business works differently once that is true.</p>
-<h2>II. What Happens Next</h2>
+<h2 id="ii-what-happens-next">II. What Happens Next</h2>
 <p class="claim">RSI in 2027, and ASI by the end of it. The length of task AI can finish on its own has been doubling roughly every four months, and the labs are already using AI to build the next AI. People are not changing at anything like that speed. The gap between what AI can do and what people do with it is the diffusion gap, and I think it peaks in the next year or two.</p>
 <p>Two things are now true at the same time. We have incredibly intelligent AI models that anyone can access, and we have a general public that has barely used them. What happens over the next year or two comes down to how those two facts play out against each other, so I'll start with where I think the technology goes and then get to what it means for people.</p>
 <p class="claim">Below are three predictions for the future:</p>
@@ -84,7 +88,7 @@ mark { background: var(--mark); color: var(--ink); padding: 0 0.2em; border-radi
 <p>Eventually people will catch up and start using AI properly over the next decade. <strong>I think the gap is at its widest sometime in the next year or two, at the point where we have ASI whilst most people are still yet to use AI regularly.</strong> <em>Until then, we are still early.</em> That's a scary thought, because to me it means there will be AI that is smarter than many people, and can do their job entirely, whilst they have never even heard of it or tried it.</p>
 <p>I think people end up in one of two groups. In the first are those who never really use AI, and before they know it, it has replaced what they do. In the second are people who are using it deeply now, and have their output augmented ad infinitum by it. Everyone will sit somewhere along that spectrum, and <em>where you sit is still up to you.</em></p>
 <p>Almost all of the opportunity in AI over the next few years sits inside that gap. It is the whole reason Hourglass exists. <strong>The countries and companies that close it fastest will win the next decade.</strong></p>
-<h2>III. Why Australia</h2>
+<h2 id="iii-why-australia">III. Why Australia</h2>
 <p class="claim">Our people are early and our institutions are late. Australians use Claude more per person than any other country, we have the land and power the AI companies want, and we are starting to build our own models. But only about 12% of our businesses use AI, and we are the most sceptical country surveyed. That makes the gap here wider than almost anywhere, and the upside bigger for whoever moves first.</p>
 <p>I think Australia is better placed than almost any country to capitalise on this coming AI boom.</p>
 <p><strong>We are curious.</strong> Australians use Claude more per person than any other country in the world, <a href="https://itbrief.com.au/story/australia-tops-claude-usage-per-capita-anthropic-says">more than six times</a> what our population would predict. We are a have-a-go country, whose inception was founded upon risk-taking and pushing forward the frontier.</p>
@@ -96,21 +100,21 @@ mark { background: var(--mark); color: var(--ink); padding: 0 0.2em; border-radi
 <ul><li>Jock and Gaurav at Fastlane, building AI that runs your ads end to end</li><li>Finlay at Fluency</li><li>Sam Rogers at Brumby (Y Combinator), who at 19 is mustering cattle with AI drones</li><li>Zander Schweitzer and Cielo Nicolosi at Alloovium (Y Combinator), building the company brain for construction</li><li>Cyrus Kelly and Shyamsundar Shrestha at markup.one (Y Combinator), out of Adelaide</li></ul>
 <p>On the other side of this, our businesses are behind. That 12% figure sits against <a href="https://census.gov/library/stories/2026/05/ai-use-businesses.html">about one in five</a> in the United States, and the US number only counts use in the previous two weeks. We are also the most sceptical country in the world about AI. <a href="https://mbs.edu/faculty-and-research/trust-and-ai/australian-story">Only 30% of Australians</a> think the benefits outweigh the risks, the lowest of 47 countries surveyed.</p>
 <p><strong>So individual Australians are early, and Australian institutions are late.</strong> This isn't bad news. It means the gap here is wider than almost anywhere, and so is the upside for anyone who moves first. It is a big part of why building Hourglass here has worked for us, and why we want to stick to our roots as an Aussie company.</p>
-<h2>IV. The Objections</h2>
+<h2 id="iv-the-objections">IV. The Objections</h2>
 <p class="claim">The common objection is that AI is dangerous and we should slow it all down. I understand the worry. But opting out doesn't stop it, it only means it happens to us on someone else's terms, and humans have a poor record of predicting the end of the world.</p>
 <p class="claim">"You are cheering for the end of the world."</p>
 <p>Whenever I write something like this, someone tells me the data centres are evil, the labs are reckless, and we should slow it all down. I understand the worry, and I have two answers.</p>
 <p>The first is that opting out of AI use does not stop it. It means all of these potentially negative impacts will happen to us, not with us. If all of Australia's AI runs on American models in American hands, every dollar we spend on it leaves the country, and we depend on whatever one or two companies decide. The strongest thing we can do is build our own capability: our own compute, our own models, our own companies. That is the case for the data centres.</p>
 <p>The second is that humans have a terrible record at predicting the end of the world. We have been sure about it many times and we have never been right. Further, if we are right, and AI will cause the end of the world, wouldn't our understanding of it help us to fight it?</p>
 <p class="claim">I would rather be optimistic and building than pessimistic and watching.</p>
-<h2>V. What To Do Next</h2>
+<h2 id="v-what-to-do-next">V. What To Do Next</h2>
 <p class="claim">If you run a business in Australia, here is where I would start. Use the best model for real work every day, build one piece of software yourself, set your company up so AI can see what is going on, and treat it as a collaborator. None of it needs a big budget.</p>
 <p><strong>1. Use it properly.</strong> A chatbot tab you open twice a week doesn't count. Pay for the best model and use it for real work every day, until you hit the moment it does something you couldn't. AI labs are incentivised to maximise individual output with AI, but it is up to you to build or buy systems that allow you to collaborate effectively with AI as a team.</p>
 <p><strong>2. Try to build software.</strong> This is the barrier worth breaking. Pick one annoying thing in your business, open Claude Code or Codex, and describe what you want. You will be surprised how far you get in an afternoon. Once you have built one thing, you stop seeing software as something you buy.</p>
 <p><strong>3. Think in systems.</strong> One person doing one task faster is a small win. The large one is setting your company up so AI can see what is going on and do the work: your meetings, your emails, your documents, in one place it can read. That context is what makes a smart model useful.</p>
 <p><strong>4. Treat it as a collaborator.</strong> The companies doing this well give AI a goal and review what comes back, the way you would with a good new hire. People keep the parts only people can do: the relationships, the judgement, and putting your name on the result.</p>
 <p>None of this needs a big budget or a technical team. <strong>It needs someone willing to go first.</strong></p>
-<h2>A Letter to Australia</h2>
+<h2 id="a-letter-to-australia">A Letter to Australia</h2>
 <p>I wrote this essay because I want us to succeed as a country, and promote rather than stifle innovation.</p>
 <p>What happens next depends on how many of us close the gap before it peaks. We have the curiosity, the land, the power and the people. <strong>What we are short on is belief that this is ours to win.</strong></p>
 <p>If you are in Australia and you have been waiting for the right moment, this is it. Have a crack.</p>
