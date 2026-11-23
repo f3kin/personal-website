@@ -8,11 +8,10 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500&family=Hanken+Grotesk:wght@400;500;600&display=swap">
 <style>
 /* The essay page. Hourglass AI brand as on thehourglass.ai: Outfit 400 display, Hanken Grotesk text, one teal.
-   Layout: the title sits in the sky of the cover drawing on a full-width paper band; below it a wide page with a
-   margin column for the section numerals, a reading column, and charts that run wider than the text. Light only. */
+   Layout: the title sits in the sky of the cover drawing on a full-width paper band; below it one reading column that the text, charts and contents all share. Light only. */
 :root { --bg: #FAFAF8; --paper: #FDFAEC; --surface: #FFFFFF; --ink: #111614; --muted: #56605C; --teal: #0B6E5B; --teal-deep: #085646; --line: #DFE5E2; --line-strong: #C5CFCA; --mark: #FFF1C2;
   --display: "Outfit", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Arial, sans-serif; --sans: "Hanken Grotesk", system-ui, "Helvetica Neue", Arial, sans-serif;
-  --gutter: max(20px, env(safe-area-inset-left, 0px)); --page: 74rem; --margin-col: 0rem; color-scheme: light; }
+  --gutter: max(20px, env(safe-area-inset-left, 0px)); --page: 46rem; --hero-page: 74rem; color-scheme: light; }
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--sans); font-size: 1.125rem; line-height: 1.62; overflow-x: clip; }
@@ -32,16 +31,16 @@ h1 span { display: block; }
 .hero img { display: block; width: 100%; height: auto; aspect-ratio: 5 / 4; object-fit: cover; object-position: 63% 100%;
   -webkit-mask-image: linear-gradient(to right, transparent, #000 5%, #000 95%, transparent), linear-gradient(to bottom, transparent, #000 14%); -webkit-mask-composite: source-in;
   mask-image: linear-gradient(to right, transparent, #000 5%, #000 95%, transparent), linear-gradient(to bottom, transparent, #000 14%); mask-composite: intersect; }
-.meta { max-width: var(--page); margin: 0 auto; padding: 1.1rem var(--gutter) 1.25rem; display: flex; flex-wrap: wrap; gap: 0.35rem 2.5rem; font-size: 0.9375rem; color: var(--muted); }
+.meta { max-width: calc(var(--page) + 2 * var(--gutter)); margin: 0 auto; padding: 1.1rem var(--gutter) 1.25rem; display: flex; flex-wrap: wrap; gap: 0.35rem 2.5rem; font-size: 0.9375rem; color: var(--muted); }
 .meta b { font-weight: 600; color: var(--ink); }
 .meta a { margin-left: auto; font-weight: 500; }
 
 /* --- Page grid --- */
-main { max-width: var(--page); margin: 0 auto; padding: 0 var(--gutter) 5rem; display: grid; grid-template-columns: var(--margin-col) minmax(0, 43rem) minmax(0, 1fr); row-gap: 1.35rem; }
-main > * { grid-column: 2; margin: 0; min-width: 0; }
+main { max-width: calc(var(--page) + 2 * var(--gutter)); margin: 0 auto; padding: 0 var(--gutter) 5rem; display: flex; flex-direction: column; gap: 1.35rem; }
+main > * { margin: 0; min-width: 0; }
 
 /* --- Contents: every row is one link --- */
-.toc { grid-column: 1 / -1; margin: 3.5rem 0 3rem; }
+.toc { margin: 3.5rem 0 0; }
 .toc h2 { all: unset; display: block; font-family: var(--display); font-size: 1.0625rem; color: var(--muted); padding-bottom: 0.75rem; }
 .toc ol { list-style: none; margin: 0; padding: 0; display: block; border-top: 1px solid var(--ink); }
 .toc a { display: grid; grid-template-columns: 2.75rem minmax(0, 1fr); column-gap: 0.5rem; align-items: baseline; padding: 0.95rem 0.5rem 1rem 0; border-bottom: 1px solid var(--line); color: var(--ink); text-decoration: none; }
@@ -52,47 +51,40 @@ main > * { grid-column: 2; margin: 0; min-width: 0; }
 .toc a:hover .t, .toc a:focus-visible .t { color: var(--teal); text-decoration-color: var(--teal); }
 
 /* --- Sections --- */
-main > h2 { grid-column: 1 / -1; position: relative; margin-top: 4.5rem; padding-top: 1.75rem; border-top: 1px solid var(--ink); font-family: var(--display); font-weight: 400; font-size: clamp(2.125rem, 7.4vw, 3.5rem); line-height: 1.02; letter-spacing: -0.035em; text-wrap: balance; scroll-margin-top: 1rem; }
-h2 .num { display: block; font-size: clamp(2.125rem, 7.4vw, 3.5rem); color: var(--teal); margin-bottom: 0.15em; }
+main > h2 { margin-top: 4.5rem; padding-top: 1.75rem; border-top: 1px solid var(--ink); font-family: var(--display); font-weight: 400; font-size: clamp(2.125rem, 7.4vw, 3.5rem); line-height: 1.02; letter-spacing: -0.035em; text-wrap: balance; scroll-margin-top: 1rem; }
+h2 .num { color: var(--teal); margin-right: 0.3em; }
 .lead { font-family: var(--display); font-size: clamp(1.3125rem, 4.4vw, 1.5625rem); line-height: 1.36; letter-spacing: -0.015em; text-wrap: pretty; margin-bottom: 0.5rem; }
 .claim { font-family: var(--display); font-weight: 400; font-size: clamp(1.375rem, 4.6vw, 1.75rem); line-height: 1.24; letter-spacing: -0.02em; text-wrap: balance; margin-top: 1.5rem; padding-left: 1.1rem; border-left: 2px solid var(--teal); }
 ol, ul { padding-left: 1.4rem; display: flex; flex-direction: column; gap: 0.55rem; }
 li::marker { color: var(--teal); }
 
 /* --- Figures run wider than the text --- */
-main > figure { grid-column: 2 / -1; margin-block: 1.25rem 0.75rem; max-width: 58rem; }
+main > figure { margin-block: 1.25rem 0.75rem; }
 figure img { display: block; width: 100%; height: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 6px; }
-main > figure.clip { grid-column: 2; }
 .clip video { display: block; width: 100%; max-height: 36rem; background: var(--ink); border-radius: 6px; }
 figcaption, .caption { color: var(--muted); font-size: 0.875rem; line-height: 1.45; margin-top: 0.6rem; }
 .caption { margin-top: -1.1rem; margin-bottom: 0.75rem; }
 .card { border: 1px solid var(--line); border-radius: 6px; background: var(--surface); padding: 0.75rem 1rem; font-size: 0.9375rem; }
 mark { background: var(--mark); color: var(--ink); padding: 0 0.2em; border-radius: 3px; }
 
-/* --- Close: a signature and one quiet line, no band --- */
-.sign { margin-top: 1.75rem; font-family: var(--display); font-size: 1.5rem; letter-spacing: -0.02em; line-height: 1.2; }
-.sign small { display: block; font-family: var(--sans); font-size: 0.9375rem; letter-spacing: 0; color: var(--muted); margin-top: 0.3rem; }
+/* --- Close: one quiet line, no band --- */
 .cta { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--line); color: var(--muted); font-size: 1rem; }
 .cta a { font-weight: 500; }
 
 @media (min-width: 64rem) {
-  :root { --gutter: 3rem; --margin-col: 9.5rem; }
+  :root { --gutter: 3rem; }
   body { font-size: 1.1875rem; }
   /* Title and standfirst sit in the empty sky, left of the rocket. Sizes follow the drawing's width so they never reach it. */
-  .title { position: absolute; z-index: 1; left: 0; top: 0; padding: min(4.2vw, 4.2rem) 0 0 max(var(--gutter), calc((100% - var(--page)) / 2 + var(--gutter))); }
+  .title { position: absolute; z-index: 1; left: 0; top: 0; padding: min(4.2vw, 4.2rem) 0 0 max(var(--gutter), calc((100% - var(--hero-page)) / 2 + var(--gutter))); }
   .hero img { aspect-ratio: auto; }
   h1 { font-size: min(6.3vw, 6.6rem); }
   .dek { margin-top: min(1.9vw, 1.9rem); font-size: min(1.55vw, 1.5rem); max-width: 17.5em; }
-  .toc a { grid-template-columns: var(--margin-col) minmax(0, 24rem) minmax(0, 1fr); column-gap: 0; padding-block: 1.1rem 1.15rem; }
-  .toc .n { font-size: 1.25rem; }
-  .toc .d { grid-column: 3; margin: 0; padding-left: 2.5rem; align-self: center; }
-  .toc h2 { padding-left: var(--margin-col); }
-  main > h2 { margin-top: 6.5rem; padding-top: 2.25rem; padding-left: var(--margin-col); margin-bottom: 0.75rem; }
-  h2 .num { position: absolute; left: 0; top: 2.25rem; margin: 0; }
+  main > h2 { margin-top: 6rem; padding-top: 2.25rem; margin-bottom: 0.5rem; }
+  main > h2.intro { margin-top: 4.5rem; }
 }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 @media print { .toc, .meta a { display: none; } .top { background: none; border: 0; } .title { padding: 0; } h1 { font-size: 44pt; } h1 span { display: inline; } .hero img { -webkit-mask-image: none; mask-image: none; aspect-ratio: auto; margin-top: 8mm; } .meta { padding: 4mm 0 8mm; }
-  main { display: block; padding: 0; } main > * { margin-block: 0 4mm; } main > h2 { margin-top: 12mm; padding-top: 5mm; font-size: 22pt; } h2 .num { font-size: 22pt; display: inline; margin-right: 0.3em; } .lead { font-size: 13pt; } .claim { font-size: 14pt; } .caption { margin-top: -2mm; } }
+  main { display: block; padding: 0; } main > * { margin-block: 0 4mm; } main > h2 { margin-top: 12mm; padding-top: 5mm; font-size: 22pt; } .lead { font-size: 13pt; } .claim { font-size: 14pt; } .caption { margin-top: -2mm; } }
 </style>
 </head>
 <body>
@@ -102,11 +94,12 @@ mark { background: var(--mark); color: var(--ink); padding: 0 0.2em; border-radi
 <figure class="hero"><img src="/drafts/situational-awareness-australia-d98ee24e/img/cover-outback-rocket.png" alt="Pencil drawing: a farmer stands by a windmill and water tank in the outback, watching a rocket launch from the horizon" width="1584" height="633"></figure>
 </div><p class="meta"><b>Finlay Ekins, Hourglass AI</b><span>November 2026</span><span>13 minute read</span><a href="/drafts/situational-awareness-australia-d98ee24e/dear-australia.pdf">Download the PDF</a></p></header>
 <main>
-<nav class="toc" aria-label="Contents"><h2>Contents</h2><ol><li><a href="#i-where-ai-is-today"><span class="n">I</span><span class="t">Where AI Is Today</span><span class="d">We already have AGI, and most of the world can't see it yet.</span></a></li><li><a href="#ii-what-happens-next"><span class="n">II</span><span class="t">What Happens Next</span><span class="d">RSI by March 2027 (many believe it's already here), and ASI by the end of 2027.</span></a></li><li><a href="#iii-the-diffusion-gap"><span class="n">III</span><span class="t">The Diffusion Gap</span><span class="d">AI is improving exponentially, people aren't.</span></a></li><li><a href="#iv-why-australia"><span class="n">IV</span><span class="t">Why Australia</span><span class="d">Our people are early and our institutions are late.</span></a></li><li><a href="#v-the-objections"><span class="n">V</span><span class="t">The Objections</span><span class="d">The most common objection I get is that AI is dangerous and we should slow it all down.</span></a></li><li><a href="#vi-what-to-do-next"><span class="n">VI</span><span class="t">What To Do Next</span><span class="d">If you run a business in Australia, there are four things I would do first.</span></a></li><li><a href="#a-letter-to-australia"><span class="n"></span><span class="t">A Letter to Australia</span></a></li></ol></nav>
+<nav class="toc" aria-label="Contents"><h2>Contents</h2><ol><li><a href="#introduction"><span class="n"></span><span class="t">Introduction</span></a></li><li><a href="#i-where-ai-is-today"><span class="n">I</span><span class="t">Where AI Is Today</span><span class="d">We already have AGI, and most of the world can't see it yet.</span></a></li><li><a href="#ii-what-happens-next"><span class="n">II</span><span class="t">What Happens Next</span><span class="d">RSI by March 2027 (many believe it's already here), and ASI by the end of 2027.</span></a></li><li><a href="#iii-the-diffusion-gap"><span class="n">III</span><span class="t">The Diffusion Gap</span><span class="d">AI is improving exponentially, people aren't.</span></a></li><li><a href="#iv-why-australia"><span class="n">IV</span><span class="t">Why Australia</span><span class="d">Our people are early and our institutions are late.</span></a></li><li><a href="#v-the-objections"><span class="n">V</span><span class="t">The Objections</span><span class="d">The most common objection I get is that AI is dangerous and we should slow it all down.</span></a></li><li><a href="#vi-what-to-do-next"><span class="n">VI</span><span class="t">What To Do Next</span><span class="d">If you run a business in Australia, there are four things I would do first.</span></a></li></ol></nav>
+<h2 id="introduction" class="intro">Introduction</h2>
 <p>In 2023 I was still studying at Melbourne Uni when I first heard about ChatGPT. A friend had gotten an 82 on their essay using it. I soon went all in on AI, spending ten months trying and failing to make a business consulting on how to use tools like ChatGPT (this business was quite novel in Australia at the time). I ended the year with a whopping revenue total of $28k. This year Hourglass had its first $100k month, and we hit a $1 million run rate in our first year as a company.</p>
 <p>The real winning differentiator in what we do was being able to harness the current AI models properly, and share that with businesses that were further behind. <strong>Today's models are immensely powerful, and most of Australia doesn't have a clue how to use them properly.</strong></p>
 <p>Below is my attempt at writing a <a href="https://situational-awareness.ai/">Situational Awareness</a> for Australia: where AI is today, what happens next, and why we're one of the best-placed countries in the world to win from it. I love this country and I want us to excel in the AI boom.</p>
-<h2 id="i-where-ai-is-today"><span class="num">I</span>Where AI Is Today</h2>
+<h2 id="i-where-ai-is-today"><span class="num">I.</span> Where AI Is Today</h2>
 <p class="lead">We already have AGI, and most of the world can't see it yet. A small group of people use today's models for nearly all of their work, while about half of adults don't use an AI chatbot at all and fewer than one in twenty pay for one. The split started with software, because writing code was the first thing AI became amazing at. Now anyone can build software in plain English, and that changes how every business works.</p>
 <p>Before I begin, I want to lay out three key terms and how I define them:</p>
 <ol><li><strong>Artificial General Intelligence (AGI)</strong> - AI that can do most knowledge work.</li><li><strong>Recursive Self-Improvement (RSI)</strong> - AI being able to build the next, more intelligent AI model autonomously.</li><li><strong>Artificial Super-Intelligence (ASI)</strong> - AI that is smarter than every human at everything intelligence-based.</li></ol>
@@ -122,7 +115,7 @@ mark { background: var(--mark); color: var(--ink); padding: 0 0.2em; border-radi
 <figure><img src="/drafts/situational-awareness-australia-d98ee24e/img/anthropic-code-per-person.png" alt="Code merged per engineer per day at Anthropic" width="1600" height="928" loading="lazy"></figure>
 <p class="caption">Changes merged per day by Claude inside Anthropic</p>
 <p>The biggest revelation here is that <strong>anyone can now build near-perfect software by prompting an AI chatbot in plain English.</strong> We work with people who have never written a line of code and are shipping tools their company runs on. Software used to be something you bought and bent your business around. Now you describe what you want and you get it. Every business runs on software, so every business works differently once that is true.</p>
-<h2 id="ii-what-happens-next"><span class="num">II</span>What Happens Next</h2>
+<h2 id="ii-what-happens-next"><span class="num">II.</span> What Happens Next</h2>
 <p class="lead">RSI by March 2027 (many believe it's already here), and ASI by the end of 2027. The length of task AI can finish on its own has been doubling roughly every four months, and the labs are already using current models in research.</p>
 <p>Two things are now true at the same time. We have incredibly intelligent AI models that anyone can access, and we have a general public that barely uses them to their full power. What happens over the next two years comes down to how those two facts play out against each other, so I'll start with where I think the technology goes and then get to what it means for people.</p>
 <p class="claim">Below are three predictions:</p>
@@ -141,7 +134,7 @@ mark { background: var(--mark); color: var(--ink); padding: 0 0.2em; border-radi
 <p>At this growth rate, that is 34 hours by August and 68 hours by December. By March 2027 it is around 120 hours, which is three full working weeks for a skilled person, done by one model on its own. By December 2027 it is over 500 hours, more than three months of full-time work. A model that can run a three month project by itself can run the project of building its successor.</p>
 <p>The interesting piece that I think gets missed is that smarter AI also lets us build smarter context and better systems around it, which is what allows the intelligence to actually be used in practice, by people and AI working together. So the models are getting better alongside everything we wrap around them, and therefore the people using them.</p>
 <p><strong>I think 2027 will be the craziest year any of us have lived through.</strong> A year from now I will come back and score these three predictions in public.</p>
-<h2 id="iii-the-diffusion-gap"><span class="num">III</span>The Diffusion Gap</h2>
+<h2 id="iii-the-diffusion-gap"><span class="num">III.</span> The Diffusion Gap</h2>
 <p class="lead">AI is improving exponentially, people aren't. The gap between what AI can do and what people do with it is the diffusion gap, and I think it peaks in the next year or two.</p>
 <p>This follows straight on from the above predictions, and it's the idea I most want Australians to take from this essay.</p>
 <p>The technology is getting better on a hockey stick curve whilst human adoption is a gradually increasing line. There is a growing gap between what AI can do and what people do with it, and it widens every month, called <strong>the diffusion gap</strong> (i.e. the gap of AI diffusing into societal use).</p>
@@ -154,7 +147,7 @@ mark { background: var(--mark); color: var(--ink); padding: 0 0.2em; border-radi
 <p>Eventually, however, people will catch up and start using AI properly over the next decade. <strong>I think the gap is at its widest sometime in the next year or two, at the point where we have ASI whilst most people are still yet to use AI regularly.</strong> Before this we are still early. After this point, the improvements in AI models stop making a difference to human work and human adoption is the number one blocker that the world will turn their sights towards. This point in time is also a scary place, because if true, it means there will be AI that is smarter than any human, and can do their job entirely, whilst many have never even heard of it or tried it.</p>
 <p>I think people end up in one of two groups. In the first are those who never really use AI, and before they know it, it has replaced what they do. In the second are people who are using it deeply before this point, and have their output augmented ad infinitum by it. Everyone will sit somewhere along that spectrum, and <em>where you sit is still up to you.</em></p>
 <p>Almost all of the opportunity in AI over the next few years sits inside that gap. It is the whole reason Hourglass exists. <strong>The countries and companies that close it fastest will win the next decade.</strong></p>
-<h2 id="iv-why-australia"><span class="num">IV</span>Why Australia</h2>
+<h2 id="iv-why-australia"><span class="num">IV.</span> Why Australia</h2>
 <p class="lead">Our people are early and our institutions are late. Australians use Claude more per person than any other country, we have the land and power the AI companies want, and we are starting to build our own models. But only about 12% of our businesses use AI, and we are the most AI-sceptical country in the world.</p>
 <p>I think Australia is better placed than almost any country to capitalise on this coming AI boom.</p>
 <p><strong>We are curious.</strong> Australians use Claude more per person than any other country in the world, <a href="https://itbrief.com.au/story/australia-tops-claude-usage-per-capita-anthropic-says">more than six times</a> what our population would predict. We're a have-a-go country, whose inception was founded upon risk-taking and pushing forward the frontier.</p>
@@ -166,7 +159,7 @@ mark { background: var(--mark); color: var(--ink); padding: 0 0.2em; border-radi
 <ul><li>Jock, Gaurav &amp; Anish @ <a href="https://www.fastlane.ai/">Fastlane</a>, building AI to run ads end to end</li><li>Finnlay &amp; Oli @ <a href="https://usefluency.com/">Fluency</a>, mapping Fortune 500 companies with AI</li><li>Sam Rogers @ <a href="https://brumby.com/">Brumby</a>, who at 19 is mustering cattle with AI drones</li></ul>
 <p>On the other side of this, our businesses are behind. Whilst 12% of ours use AI <a href="https://census.gov/library/stories/2026/05/ai-use-businesses.html">roughly 20%</a> do so in the US, as told by this year's census. We are also the most AI-sceptical country in the world. <a href="https://mbs.edu/faculty-and-research/trust-and-ai/australian-story">Only 30% of Australians</a> think the benefits outweigh the risks, the lowest of any country surveyed.</p>
 <p><strong>So many individual Australians are early, and Australian institutions are late.</strong> This isn't bad news, but it does mean that the gap here is wider than almost anywhere, and so is the upside for anyone who moves first. This is a big part of why building Hourglass here has worked for us, and why we are firmly sticking to our roots as an Aussie company.</p>
-<h2 id="v-the-objections"><span class="num">V</span>The Objections</h2>
+<h2 id="v-the-objections"><span class="num">V.</span> The Objections</h2>
 <p class="lead">The most common objection I get is that AI is dangerous and we should slow it all down. Opting out isn't a real choice for Australia, it just puts our fate in the hands of others.</p>
 <p class="claim">"You are cheering for the end of the world."</p>
 <p>Whenever I write something like this, someone tells me the data centres are evil, the AI labs are reckless, and we should slow it all down. I understand the worry, and I have two answers.</p>
@@ -174,7 +167,7 @@ mark { background: var(--mark); color: var(--ink); padding: 0 0.2em; border-radi
 <p>The second is that humans have a terrible record at predicting the end of the world. We have been sure about it many times and we have never been right. Further, if we are right, and AI will cause the end of the world, wouldn't our understanding of it help us to fight it?</p>
 <p class="claim">I would rather be optimistic and building than pessimistic and watching.</p>
 <p>Further, AI isn't going to take your job, someone who is brilliant at using it will.</p>
-<h2 id="vi-what-to-do-next"><span class="num">VI</span>What To Do Next</h2>
+<h2 id="vi-what-to-do-next"><span class="num">VI.</span> What To Do Next</h2>
 <p class="lead">If you run a business in Australia, there are four things I would do first.</p>
 <p><strong>1. Use it properly.</strong> A chatbot tab you open twice a week isn't enough. Pay for the best model and use it for real work every day, until you hit the moment it does something you couldn't.</p>
 <p><strong>2. Try to build software.</strong> This is the barrier worth breaking. Pick one annoying thing in your business, open Claude Code or Codex, and describe what you want. You will be surprised how far you get in an afternoon. Once you have built one thing, you stop seeing software as something you buy.</p>
@@ -185,8 +178,7 @@ mark { background: var(--mark); color: var(--ink); padding: 0 0.2em; border-radi
 <p>I wrote this essay because I want us to succeed as a country, and promote innovation, rather than stifle it. I see my friends who are brilliant young AI minds leaving the best country on Earth because it doesn't support their ambition.</p>
 <p>What happens next depends on how many of us close the gap before it peaks. We have the curiosity, the land, the power and the people. We are short on believing this is ours to win.</p>
 <p>If you are in Australia and you have been waiting for the right moment, this is it. Have a crack.</p>
-<p class="sign">Finlay Ekins<small>Hourglass AI, Melbourne. November 2026.</small></p>
-<p class="cta">If you want the playbooks we use to run Hourglass, they're open source. <a href="https://thehourglass.ai/finlay/australia-state-of-ai">Read the playbooks</a></p>
+<p class="cta">If you want the playbooks we use to run Hourglass, they're <a href="https://thehourglass.ai/finlay/australia-state-of-ai">open source here</a>.</p>
 </main>
 </body>
 </html>
