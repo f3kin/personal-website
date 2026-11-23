@@ -5,30 +5,31 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
 <title>Situational Awareness for Australia</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Hanken+Grotesk:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500&family=Hanken+Grotesk:wght@400;500;600&display=swap">
 <style>
-/* The essay page: Hourglass AI brand (design/brand). Warm canvas, one reading column, white charts framed on white cards. Light only: the charts are white images. */
+/* The essay page: Hourglass AI brand as on thehourglass.ai (Outfit 400 display at -0.02em, Hanken Grotesk text, logo lockup). Warm canvas, one reading column, white charts framed on white cards. Light only: the charts are white images. */
 :root { --bg: #FAFAF8; --surface: #FFFFFF; --ink: #111614; --muted: #56605C; --teal: #0B6E5B; --teal-deep: #085646; --line: #DFE5E2; --mark: #FFF1C2;
-  --serif: "Instrument Serif", Georgia, "Times New Roman", serif; --sans: "Hanken Grotesk", system-ui, "Helvetica Neue", Arial, sans-serif; color-scheme: light; }
+  --display: "Outfit", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Arial, sans-serif; --sans: "Hanken Grotesk", system-ui, "Helvetica Neue", Arial, sans-serif; color-scheme: light; }
 * { box-sizing: border-box; }
 body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--sans); font-size: 1.0625rem; line-height: 1.6; overflow-x: clip;
   padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 1.5rem 0; }
 .mast { max-width: 41rem; margin: 0 auto 3rem; }
-.mast a { font-family: var(--serif); font-size: 1.375rem; color: var(--ink); text-decoration: none; }
+.mast a { display: inline-flex; }
+.mast img { height: 32px; width: auto; }
 main { max-width: 41rem; margin: 0 auto; display: flex; flex-direction: column; gap: 1.2rem; }
 main > * { margin: 0; min-width: 0; }
-h1 { font-family: var(--serif); font-weight: 400; font-size: clamp(2.75rem, 7.5vw, 4.25rem); line-height: 1.02; letter-spacing: -0.01em; text-wrap: balance; }
-.dek { font-family: var(--serif); font-size: clamp(1.375rem, 3.4vw, 1.75rem); line-height: 1.25; color: var(--muted); text-wrap: pretty; margin-top: 0.25rem; }
+h1 { font-family: var(--display); font-weight: 400; font-size: clamp(2.375rem, 6.6vw, 3.75rem); line-height: 1.02; letter-spacing: -0.02em; text-wrap: balance; }
+.dek { font-family: var(--display); font-size: clamp(1.1875rem, 2.8vw, 1.4375rem); line-height: 1.35; letter-spacing: -0.01em; color: var(--muted); text-wrap: pretty; margin-top: 0.25rem; }
 .byline { color: var(--muted); font-size: 0.9375rem; margin-top: 0.5rem; }
 .hero { margin-block: 1rem 0.5rem; }
 .hero img { border: 0; border-radius: 6px; }
 .toc ul { list-style: none; margin: 0; padding: 1.1rem 0; border-block: 1px solid var(--line); display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: 0.35rem 2rem; }
-.toc a { font-family: var(--serif); font-size: 1.1875rem; color: var(--ink); text-decoration: none; }
+.toc a { font-family: var(--display); font-size: 1.0625rem; letter-spacing: -0.01em; color: var(--ink); text-decoration: none; }
 .toc a:hover { color: var(--teal); }
-h2 { font-family: var(--serif); font-weight: 400; font-size: clamp(2rem, 5vw, 2.5rem); line-height: 1.1; letter-spacing: -0.01em; text-wrap: balance; margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--line); scroll-margin-top: 1rem; }
-h2 .num { display: block; font-size: 1.375rem; color: var(--teal); margin-bottom: 0.35rem; }
+h2 { font-family: var(--display); font-weight: 400; font-size: clamp(1.75rem, 4.4vw, 2.25rem); line-height: 1.1; letter-spacing: -0.02em; text-wrap: balance; margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--line); scroll-margin-top: 1rem; }
+h2 .num { display: block; font-family: var(--sans); font-weight: 600; letter-spacing: 0; font-size: 0.9375rem; color: var(--teal); margin-bottom: 0.35rem; }
 .lead { font-size: 1.25rem; line-height: 1.5; text-wrap: pretty; }
-.claim { font-family: var(--serif); font-weight: 400; font-size: 1.625rem; line-height: 1.22; text-wrap: balance; margin-top: 1.25rem; }
+.claim { font-family: var(--display); font-weight: 400; font-size: 1.4375rem; line-height: 1.25; letter-spacing: -0.015em; text-wrap: balance; margin-top: 1.25rem; }
 strong { font-weight: 600; }
 a { color: var(--teal); text-underline-offset: 0.15em; overflow-wrap: anywhere; }
 a:hover { color: var(--teal-deep); }
@@ -40,7 +41,7 @@ figure img { display: block; width: 100%; height: auto; background: var(--surfac
 figcaption, .caption { color: var(--muted); font-size: 0.8125rem; font-weight: 500; line-height: 1.45; margin-top: 0.5rem; }
 .caption { margin-top: -0.9rem; }
 .card { border: 1px solid var(--line); border-radius: 6px; background: var(--surface); padding: 0.75rem 1rem; font-size: 0.9375rem; }
-.cta { margin-top: 3.5rem; padding: 3.5rem 0 4rem; background: var(--teal); color: #fff; font-family: var(--serif); font-size: clamp(1.5rem, 4vw, 2rem); line-height: 1.2; text-wrap: balance;
+.cta { margin-top: 3.5rem; padding: 3.5rem 0 4rem; background: var(--teal); color: #fff; font-family: var(--display); font-size: clamp(1.375rem, 3.6vw, 1.75rem); line-height: 1.25; letter-spacing: -0.015em; text-wrap: balance;
   box-shadow: 0 0 0 100vmax var(--teal); clip-path: inset(0 -100vmax); }
 .cta a { color: #fff; font-family: var(--sans); font-size: 1.0625rem; font-weight: 600; display: block; margin-top: 1rem; }
 mark { background: var(--mark); color: var(--ink); padding: 0 0.2em; border-radius: 3px; }
@@ -48,12 +49,12 @@ mark { background: var(--mark); color: var(--ink); padding: 0 0.2em; border-radi
 </style>
 </head>
 <body>
-<p class="mast"><a href="https://thehourglass.ai">hourglass ai</a></p>
+<p class="mast"><a href="https://thehourglass.ai" aria-label="Hourglass AI, home"><img src="/drafts/situational-awareness-australia-d98ee24e/img/hourglass-lockup.svg" width="6172" height="1008" alt=""></a></p>
 <main>
 <h1>Situational Awareness for Australia</h1>
 <p class="dek">Where AI is today, what happens next, and why we're one of the best-placed countries in the world to win from it.</p>
-<p class="byline">Finlay Ekins, Hourglass AI · November 2026 · 13 minute read · <a href="situational-awareness-for-australia.pdf">PDF</a></p>
-<figure class="hero"><img src="img/cover-wave.png" alt="Pencil drawing: one surfer walks towards a huge breaking wave while a crowd stands back on the beach" width="1584" height="633"></figure>
+<p class="byline">Finlay Ekins, Hourglass AI · November 2026 · 13 minute read · <a href="/drafts/situational-awareness-australia-d98ee24e/situational-awareness-for-australia.pdf">PDF</a></p>
+<figure class="hero"><img src="/drafts/situational-awareness-australia-d98ee24e/img/cover-wave.png" alt="Pencil drawing: one surfer walks towards a huge breaking wave while a crowd stands back on the beach" width="1584" height="633"></figure>
 <nav class="toc" aria-label="Contents"><ul><li><a href="#i-where-ai-is-today">I. Where AI Is Today</a></li><li><a href="#ii-what-happens-next">II. What Happens Next</a></li><li><a href="#iii-the-diffusion-gap">III. The Diffusion Gap</a></li><li><a href="#iv-why-australia">IV. Why Australia</a></li><li><a href="#v-the-objections">V. The Objections</a></li><li><a href="#vi-what-to-do-next">VI. What To Do Next</a></li><li><a href="#a-letter-to-australia">A Letter to Australia</a></li></ul></nav>
 <p>In 2023 I was still studying at Melbourne Uni when I first heard about ChatGPT. A friend had gotten an 82 on their essay using it. I soon went all in on AI, spending ten months trying and failing to make a business consulting on how to use tools like ChatGPT (this business was quite novel in Australia at the time). I ended the year with a whopping revenue total of $28k. This year Hourglass had its first $100k month, and we hit a $1 million run rate in our first year as a company.</p>
 <p>The real winning differentiator in what we do was being able to harness the current AI models properly, and share that with businesses that were further behind. <strong>Today's models are immensely powerful, and most of Australia doesn't have a clue how to use them properly.</strong></p>
@@ -62,16 +63,16 @@ mark { background: var(--mark); color: var(--ink); padding: 0 0.2em; border-radi
 <p class="lead">We already have AGI, and most of the world can't see it yet. A small group of people use today's models for nearly all of their work, while about half of adults don't use an AI chatbot at all and fewer than one in twenty pay for one. The split started with software, because writing code was the first thing AI became amazing at. Now anyone can build software in plain English, and that changes how every business works.</p>
 <p>Before I begin, I want to lay out three key terms and how I define them:</p>
 <ol><li><strong>Artificial General Intelligence (AGI)</strong> - AI that can do most knowledge work.</li><li><strong>Recursive Self-Improvement (RSI)</strong> - AI being able to build the next, more intelligent AI model autonomously.</li><li><strong>Artificial Super-Intelligence (ASI)</strong> - AI that is smarter than every human at everything intelligence-based.</li></ol>
-<figure><img src="img/key-terms-white.png" alt="AGI, RSI and ASI defined" width="1600" height="693" loading="lazy"></figure>
+<figure><img src="/drafts/situational-awareness-australia-d98ee24e/img/key-terms-white.png" alt="AGI, RSI and ASI defined" width="1600" height="693" loading="lazy"></figure>
 <p class="claim">We already have AGI. The world can't see it yet.</p>
 <p>Right now, a select group of people truly appreciate how good today's AI models are. These people use them daily for near all of their work, and many work at AI companies. Most of these people also live on Twitter, which has now become the home for novel AI discourse. I'm of the belief that if you are deep enough in using AI and building AI systems, you will agree with me that models like Opus 5.5 by Anthropic can handle a large majority (80%+) of knowledge work if provided with the proper context.</p>
 <p><strong>By my own definition, this is AGI.</strong> Some may disagree because there is no consensus definition of what AGI means, but it's hard to dispute that if you were shown today's AI models just 5 years ago, you would think it was something out of a Sci-Fi movie set in the distant future.</p>
 <p>Sam Altman <a href="https://www.youtube.com/watch?v=oi-E6xB4wSU">said last week</a> "you can't simply draw a line and say AGI didn't exist before and suddenly exists now." I agree with the sentiment and think that when we look back at November 2026, we will say it was already here and we just hadn't agreed on it.</p>
 <p>On the other side, outside the echo chamber of AI meetups and Twitter threads, <strong>the general population has barely scratched the surface of using AI.</strong> Globally, 57% of adults have never used AI. Only 10% of workers use an AI agent every day and fewer than 6% of ChatGPT's users pay for it, which is what unlocks the tools that hold the real power of AI advancements. Australia is doing better than most with about 40% of working-age Australians using AI daily.</p>
-<figure><img src="img/hundred-people-v2.png" alt="Out of every 100 people, how many really use AI" width="1600" height="920" loading="lazy"></figure>
+<figure><img src="/drafts/situational-awareness-australia-d98ee24e/img/hundred-people-v2.png" alt="Out of every 100 people, how many really use AI" width="1600" height="920" loading="lazy"></figure>
 <p>This leaves us today in an incredibly interesting dynamic, where <strong>a small selection of the population has a near infinite supply of intelligent workers (AI agents) for ~$350 a month, whilst for the rest of the world, nothing's changed.</strong></p>
 <p>The reason for this split is that the first place AI excelled was writing code, so those people who felt the incredible advancements first were those in technical roles like software developers. If you don't write software, the last few years in AI mostly looked like a chatbot getting slightly smarter over time. If you do, you watched your entire industry transform in front of you. Claude Code is less than two years old. I haven't written code by hand in months, and Hourglass is a team of six that runs over 95% of admin and operations via AI agents working day and night.</p>
-<figure><img src="img/anthropic-code-per-person.png" alt="Code merged per engineer per day at Anthropic" width="1600" height="928" loading="lazy"></figure>
+<figure><img src="/drafts/situational-awareness-australia-d98ee24e/img/anthropic-code-per-person.png" alt="Code merged per engineer per day at Anthropic" width="1600" height="928" loading="lazy"></figure>
 <p class="caption">Changes merged per day by Claude inside Anthropic</p>
 <p>The biggest revelation here is that <strong>anyone can now build near-perfect software by prompting an AI chatbot in plain English.</strong> We work with people who have never written a line of code and are shipping tools their company runs on. Software used to be something you bought and bent your business around. Now you describe what you want and you get it. Every business runs on software, so every business works differently once that is true.</p>
 <h2 id="ii-what-happens-next"><span class="num">II.</span> What Happens Next</h2>
@@ -83,12 +84,12 @@ mark { background: var(--mark); color: var(--ink); padding: 0 0.2em; border-radi
 <p class="claim">3. ASI is achieved by the end of 2027.</p>
 <p>I've already made the argument for the first one above, so I'll focus on the other two.</p>
 <p>On RSI, the AI labs are already most of the way there. As of May 2026, <a href="https://www.anthropic.com/institute/recursive-self-improvement">more than 80% of the code merged at Anthropic was written by Claude</a>, up from low single digits a year before. <a href="https://anthropic.com/responsible-scaling-policy/roadmap">Anthropic's own safety roadmap</a> says it is plausible, as soon as early 2027, that its systems could fully automate the work of top-tier research teams, including in AI itself. One of its co-founders, Jack Clark, puts the odds of RSI at 60% by the end of 2028. <strong>My own guess is that it happens way sooner, around March 2027.</strong> We consistently underestimate how fast this exponential is moving, and we always downplay what comes next, which is why my predictions are sooner than most.</p>
-<figure><img src="img/anthropic-research-next-step.png" alt="Where a researcher went wrong, could Claude have done better?" width="1600" height="928" loading="lazy"></figure>
+<figure><img src="/drafts/situational-awareness-australia-d98ee24e/img/anthropic-research-next-step.png" alt="Where a researcher went wrong, could Claude have done better?" width="1600" height="928" loading="lazy"></figure>
 <p class="caption">Anthropic's chart showing Claude's contributions to the research of its next model</p>
 <p>OpenAI is in a similar spot. They've <a href="https://openai.com/index/building-standards-next-phase-ai/">written</a> that "fully autonomous RSI is not happening today" and that it shouldn't be pursued until it can be done safely, and Sam Altman has reportedly said they slowed down their own work on it for that reason. <strong>I read that as a company that is close enough to RSI that it has had to decide when to hit the brakes.</strong></p>
 <p>As I write this, on 19 November, Anthropic is going public on the Nasdaq. A company that did not exist six years ago is now floating at a valuation of nearly 2 Trillion USD.</p>
 <p>On ASI, Altman is on record saying that by the end of 2028, more of the world's intellectual capacity could sit inside data centres than outside them. I think he is being conservative. The clearest measure I've seen is from <a href="https://metr.org/time-horizons/">METR</a>, who track how long a task the best AI model can finish on its own. In early 2023 that was four minutes. By April this year it was 17 hours, and <strong>it has been doubling roughly every four months.</strong></p>
-<figure><img src="img/time-horizon-v2.png" alt="How long a task the best AI can finish on its own" width="1600" height="907" loading="lazy"></figure>
+<figure><img src="/drafts/situational-awareness-australia-d98ee24e/img/time-horizon-v2.png" alt="How long a task the best AI can finish on its own" width="1600" height="907" loading="lazy"></figure>
 <p class="caption">METR has stopped updating the chart because the timeframe is now too long for them to test</p>
 <p>At this growth rate, that is 34 hours by August and 68 hours by December. By March 2027 it is around 120 hours, which is three full working weeks for a skilled person, done by one model on its own. By December 2027 it is over 500 hours, more than three months of full-time work. A model that can run a three month project by itself can run the project of building its successor.</p>
 <p>The interesting piece that I think gets missed is that smarter AI also lets us build smarter context and better systems around it, which is what allows the intelligence to actually be used in practice, by people and AI working together. So the models are getting better alongside everything we wrap around them, and therefore the people using them.</p>
@@ -97,12 +98,12 @@ mark { background: var(--mark); color: var(--ink); padding: 0 0.2em; border-radi
 <p class="lead">AI is improving exponentially, people aren't. The gap between what AI can do and what people do with it is the diffusion gap, and I think it peaks in the next year or two.</p>
 <p>This follows straight on from the above predictions, and it's the idea I most want Australians to take from this essay.</p>
 <p>The technology is getting better on a hockey stick curve whilst human adoption is a gradually increasing line. There is a growing gap between what AI can do and what people do with it, and it widens every month, called <strong>the diffusion gap</strong> (i.e. the gap of AI diffusing into societal use).</p>
-<figure><img src="img/diffusion-gap-white-v3.png" alt="The diffusion gap" width="1600" height="900" loading="lazy"></figure>
+<figure><img src="/drafts/situational-awareness-australia-d98ee24e/img/diffusion-gap-white-v3.png" alt="The diffusion gap" width="1600" height="900" loading="lazy"></figure>
 <p class="caption">My illustration of the diffusion gap</p>
-<figure><img src="img/anthropic-roadshow-slide.jpg" alt="Anthropic slide: intelligence against where users are" width="1600" height="812" loading="lazy"></figure>
+<figure><img src="/drafts/situational-awareness-australia-d98ee24e/img/anthropic-roadshow-slide.jpg" alt="Anthropic slide: intelligence against where users are" width="1600" height="812" loading="lazy"></figure>
 <p class="caption">A similar chart from Anthropic's IPO roadshow</p>
 <p>Altman has said this is what he got wrong: "The economy just has so much inertia. People keep doing the same things they're doing." I have spent this year inside Australian businesses, and this is obvious. Getting staff to use AI and open their minds to new ways of working is by far the hardest part.</p>
-<figure class="clip"><video controls preload="metadata" playsinline src="vid/altman-inertia-snippet.mp4"></video><figcaption>Sam Altman on the Founder's Podcast. <a href="https://x.com/davidsenra/status/2093324738328195372">Original post</a></figcaption></figure>
+<figure class="clip"><video controls preload="metadata" playsinline src="/drafts/situational-awareness-australia-d98ee24e/vid/altman-inertia-snippet.mp4"></video><figcaption>Sam Altman on the Founder's Podcast. <a href="https://x.com/davidsenra/status/2093324738328195372">Original post</a></figcaption></figure>
 <p>Eventually, however, people will catch up and start using AI properly over the next decade. <strong>I think the gap is at its widest sometime in the next year or two, at the point where we have ASI whilst most people are still yet to use AI regularly.</strong> Before this we are still early. After this point, the improvements in AI models stop making a difference to human work and human adoption is the number one blocker that the world will turn their sights towards. This point in time is also a scary place, because if true, it means there will be AI that is smarter than any human, and can do their job entirely, whilst many have never even heard of it or tried it.</p>
 <p>I think people end up in one of two groups. In the first are those who never really use AI, and before they know it, it has replaced what they do. In the second are people who are using it deeply before this point, and have their output augmented ad infinitum by it. Everyone will sit somewhere along that spectrum, and <em>where you sit is still up to you.</em></p>
 <p>Almost all of the opportunity in AI over the next few years sits inside that gap. It is the whole reason Hourglass exists. <strong>The countries and companies that close it fastest will win the next decade.</strong></p>
@@ -113,7 +114,7 @@ mark { background: var(--mark); color: var(--ink); padding: 0 0.2em; border-radi
 <p><strong>We have the room and the power.</strong> Data centres need land and energy, and we have plenty of both. Anthropic has <a href="https://www.itnews.com.au/news/anthropic-signs-first-australia-data-centre-agreement-628972">reportedly signed its first Australian data centre lease</a>, a 2.16 gigawatt site in Queensland. OpenAI and NEXTDC are <a href="https://www.minister.industry.gov.au/ministers/timayres/media-releases/7-billion-infrastructure-deal-boost-ai-australia">planning a $7 billion campus</a> in Western Sydney. The biggest AI companies in the world want their compute here.</p>
 <p><strong>We can be sovereign.</strong> We are a stable, trusted country with our own resources. We can run this technology on our own soil and under our own rules, and protect ourselves from once again relying on other global powers.</p>
 <p><strong>We are starting to build our own.</strong> This month Trellis Data in Canberra <a href="https://trellisdata.com/newsroom/trellis-data-launches-agentaus-1/">released Agentaus 1</a>, a 220 billion parameter model built in Australia. It scored 84.4% on MMLU-Pro, a test of knowledge and reasoning, which Trellis says ranks it 43rd in the world and first in Australia. This makes me so bullish on what we can create as a country.</p>
-<figure class="clip"><video controls preload="metadata" playsinline src="vid/agentaus-launch.mp4"></video><figcaption>Trellis Data launches Agentaus 1. <a href="https://x.com/MGately_au/status/2122780345947017287">Original post</a></figcaption></figure>
+<figure class="clip"><video controls preload="metadata" playsinline src="/drafts/situational-awareness-australia-d98ee24e/vid/agentaus-launch.mp4"></video><figcaption>Trellis Data launches Agentaus 1. <a href="https://x.com/MGately_au/status/2122780345947017287">Original post</a></figcaption></figure>
 <p><strong>We also have a ridiculously talented young tech scene.</strong> Across all major cities, there is a wave of founders in their twenties building AI-native companies from day one. A few of them:</p>
 <ul><li>Jock, Gaurav &amp; Anish @ <a href="https://www.fastlane.ai/">Fastlane</a>, building AI to run ads end to end</li><li>Finnlay &amp; Oli @ <a href="https://usefluency.com/">Fluency</a>, mapping Fortune 500 companies with AI</li><li>Sam Rogers @ <a href="https://brumby.com/">Brumby</a>, who at 19 is mustering cattle with AI drones</li></ul>
 <p>On the other side of this, our businesses are behind. Whilst 12% of ours use AI <a href="https://census.gov/library/stories/2026/05/ai-use-businesses.html">roughly 20%</a> do so in the US, as told by this year's census. We are also the most AI-sceptical country in the world. <a href="https://mbs.edu/faculty-and-research/trust-and-ai/australian-story">Only 30% of Australians</a> think the benefits outweigh the risks, the lowest of any country surveyed.</p>
