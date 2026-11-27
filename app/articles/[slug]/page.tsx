@@ -28,7 +28,7 @@ export async function generateMetadata(
   return {
     title: `${article.title}  -  Finlay Ekins`,
     description: article.previewText || undefined,
-    alternates: { canonical: `${LINKS.site.base}/articles/${article.slug}` },
+    alternates: { canonical: article.canonicalUrl ?? `${LINKS.site.base}/articles/${article.slug}` },
     openGraph: {
       title: article.title,
       description: article.previewText || undefined,
