@@ -10,6 +10,8 @@ export interface HostedArticle {
   xArticleUrl: string
   cover: string | null
   html: string
+  /** Set when the original lives elsewhere (e.g. the Hourglass site); defaults to this site's copy. */
+  canonicalUrl?: string
 }
 
 const ARTICLES_DIR = path.join(process.cwd(), "content", "articles")
